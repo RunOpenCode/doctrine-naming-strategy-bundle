@@ -1,5 +1,9 @@
 # Doctrine naming strategy bundle
 
+[![Packagist](https://img.shields.io/packagist/v/RunOpenCode/doctrine-naming-strategy-bundle.svg)](https://packagist.org/packages/runopencode/doctrine-naming-strategy-bundle)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/build-status/master)
+
 Default Symfony2 Doctrine naming strategy `doctrine.orm.naming_strategy.underscore` for Entity tables is really great
 and we usually use it without any modifications. However, generated table names sometimes can be too ambiguous and 
 conflicting, especially if vendor bundles are used, or there is a possibility to reuse some of the code from previous projects.
