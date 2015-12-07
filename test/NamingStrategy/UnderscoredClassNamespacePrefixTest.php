@@ -49,7 +49,7 @@ class UnderscoredClassNamespacePrefixTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidConfiguration()
     {
-        $strategy = new UnderscoredClassNamespacePrefix(array(
+        new UnderscoredClassNamespacePrefix(array(
             'map' => array(
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix'
             ),

@@ -51,7 +51,7 @@ class UnderscoredBundleNamePrefixTest extends \PHPUnit_Framework_TestCase
      */
     public function invalidConfiguration()
     {
-        $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), array(
+        new UnderscoredBundleNamePrefix($this->mockKernel(), array(
             'map' => array(
                 'DoctrineNamingStrategyBundle' => 'my_prefix'
             ),

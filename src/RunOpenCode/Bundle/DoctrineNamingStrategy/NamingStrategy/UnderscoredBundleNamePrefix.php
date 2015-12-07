@@ -57,7 +57,7 @@ class UnderscoredBundleNamePrefix extends UnderscoreNamingStrategy
         /**
          * @var BundleInterface $bundle;
          */
-        foreach ($bundles = $kernel->getBundles() as $bundle) {
+        foreach ($kernel->getBundles() as $bundle) {
 
             if (count($configuration['blacklist']) > 0 && in_array($bundle->getName(), $configuration['blacklist'])) {
                 continue;

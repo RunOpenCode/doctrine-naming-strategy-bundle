@@ -28,12 +28,9 @@ class Extension extends BaseExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-
-        $this
-            ->configureUnderscoredBundlePrefixNamer($container, $config)
-            ->configureUnderscoredClassNamespacePrefixNamer($container, $config)
-            ->configureNamerCollection($container, $config)
-            ;
+        $this->configureUnderscoredBundlePrefixNamer($container, $config);
+        $this->configureUnderscoredClassNamespacePrefixNamer($container, $config);
+        $this->configureNamerCollection($container, $config);
     }
 
     /**
