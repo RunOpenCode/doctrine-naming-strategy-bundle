@@ -96,6 +96,4 @@ class UnderscoredBundleNamePrefix extends UnderscoreNamingStrategy
 
         return '';
     }
-
-
 }

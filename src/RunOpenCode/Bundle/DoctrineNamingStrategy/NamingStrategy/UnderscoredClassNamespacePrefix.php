@@ -81,7 +81,7 @@ class UnderscoredClassNamespacePrefix extends UnderscoreNamingStrategy
                     foreach ($this->whitelist as $whitelistedFqcn) {
 
                         if (strpos($className, $whitelistedFqcn) === 0) {
-                            return $tablePrefix;
+                            return $this->propertyToColumnName($tablePrefix);
                         }
                     }
 
@@ -89,7 +89,7 @@ class UnderscoredClassNamespacePrefix extends UnderscoreNamingStrategy
 
                 } else {
 
-                    return $tablePrefix;
+                    return $this->propertyToColumnName($tablePrefix);
                 }
             }
         }

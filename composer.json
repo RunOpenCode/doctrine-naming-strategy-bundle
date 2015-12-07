@@ -22,10 +22,20 @@
             "RunOpenCode\\Bundle\\DoctrineNamingStrategy\\": "src/RunOpenCode/Bundle/DoctrineNamingStrategy/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\": "test/"
+        }
+    },
     "require": {
         "php": ">=5.4",
         "symfony/framework-bundle": "~2.3",
         "doctrine/doctrine-bundle": "~1.3",
         "doctrine/orm": "~2.3"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~2.7",
+        "symfony/debug": "~2.7",
+        "phpunit/phpunit": ">=4.8"
     }
 }

@@ -126,7 +126,4 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
             - run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
             - run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix            
             
-## TODO
-            
-Issue with this bundle is that unit tests are not provided, even though classes that we are provided are used in production 
-environment. As soon as we find a time, we are going to provide a tests as well, we are sorry for the inconvenience.            
+         
