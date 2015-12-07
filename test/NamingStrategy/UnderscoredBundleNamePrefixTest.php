@@ -100,7 +100,7 @@ class UnderscoredBundleNamePrefixTest extends \PHPUnit_Framework_TestCase
 
     private function mockKernel()
     {
-        $stub = $this->getMockBuilder(Kernel::class)->disableOriginalConstructor()->getMock();
+        $stub = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\Kernel')->disableOriginalConstructor()->getMock();
 
         $stub->method('getBundles')
             ->willReturn(array(

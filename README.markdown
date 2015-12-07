@@ -3,6 +3,10 @@
 [![Packagist](https://img.shields.io/packagist/v/RunOpenCode/doctrine-naming-strategy-bundle.svg)](https://packagist.org/packages/runopencode/doctrine-naming-strategy-bundle)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/build-status/master)
+[![Code Coverage](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/RunOpenCode/doctrine-naming-strategy-bundle/?branch=master)
+[![Build Status](https://travis-ci.org/RunOpenCode/doctrine-naming-strategy-bundle.svg?branch=master)](https://travis-ci.org/RunOpenCode/doctrine-naming-strategy-bundle)
+
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f6c58d45-2390-4540-9909-c5fb66ed1b62/big.png)](https://insight.sensiolabs.com/projects/f6c58d45-2390-4540-9909-c5fb66ed1b62)
 
 Default Symfony2 Doctrine naming strategy `doctrine.orm.naming_strategy.underscore` for Entity tables is really great
 and we usually use it without any modifications. However, generated table names sometimes can be too ambiguous and 
@@ -126,4 +130,5 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
             - run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
             - run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix            
             
-         
+            
+            
