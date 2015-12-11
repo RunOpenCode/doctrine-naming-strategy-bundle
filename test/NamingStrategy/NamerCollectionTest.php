@@ -33,13 +33,41 @@ class NamerCollectionTest extends \PHPUnit_Framework_TestCase
                 )),
                 new UnderscoredClassNamespacePrefix(array(
                     'map' => array(
-                        'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'totaly_different_prefix'
+                        'RunOpenCode\\Bundle\\TestNamespace2\\Entity' => 'totaly_different_prefix'
                     )
                 ))
             )
         );
 
         $this->assertSame('my_other_prefix_some_class', $namer->classToTableName('RunOpenCode\\Bundle\\TestNamespace\\Entity\\SomeClass'));
+    }
+
+    /**
+     * @test
+     */
+    public function differentStrategiesCanConcatenate()
+    {
+        $namer = new NamerCollection(
+            new UnderscoredClassNamespacePrefix(array(
+                'map' => array(
+                    'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix'
+                )
+            )),
+            array(
+                new UnderscoredClassNamespacePrefix(array(
+                    'map' => array(
+                        'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_other_prefix'
+                    )
+                )),
+                new UnderscoredClassNamespacePrefix(array(
+                    'map' => array(
+                        'RunOpenCode\\Bundle\\TestNamespace2\\Entity' => 'totaly_different_prefix'
+                    )
+                ))
+            )
+        );
+
+        $this->assertSame('my_other_prefix_some_class_totaly_different_prefix_some_other_class', $namer->joinTableName('RunOpenCode\\Bundle\\TestNamespace\\Entity\\SomeClass', 'RunOpenCode\\Bundle\\TestNamespace2\\Entity\\SomeOtherClass'));
     }
 }
 
