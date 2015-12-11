@@ -13,6 +13,10 @@ use Doctrine\ORM\Mapping\NamingStrategy;
 
 class NamerCollection implements NamingStrategy
 {
+    const UNDERSCORE = 'underscore';
+    const NOTHING = 'nothing';
+    const UCFIRST = 'ucfirst';
+
     /**
      * @var NamingStrategy
      */
@@ -23,10 +27,16 @@ class NamerCollection implements NamingStrategy
      */
     protected $concurrentNamers;
 
-    public function __construct(NamingStrategy $defaultNamer, array $concurrentNamers)
+    /**
+     * @var string
+     */
+    protected $concatenation;
+
+    public function __construct(NamingStrategy $defaultNamer, array $concurrentNamers, $concatenation = self::UNDERSCORE)
     {
         $this->defaultNamer = $defaultNamer;
         $this->concurrentNamers = $concurrentNamers;
+        $this->concatenation = $concatenation;
     }
 
     /**
@@ -134,19 +144,18 @@ class NamerCollection implements NamingStrategy
      */
     public function joinTableName($sourceEntity, $targetEntity, $propertyName = null)
     {
-        $defaultName = $this->defaultNamer->joinTableName($sourceEntity, $targetEntity, $propertyName);
-
-        /**
-         * @var NamingStrategy $concurrentNamer
-         */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
-
-            if (($newProposal = $concurrentNamer->joinTableName($sourceEntity, $targetEntity, $propertyName)) != $defaultName) {
-                return $newProposal;
-            }
+        switch ($this->concatenation) {
+            case self::UCFIRST:
+                return $this->classToTableName($sourceEntity) . ucfirst($this->classToTableName($targetEntity));
+                break;
+            case self::NOTHING:
+                return $this->classToTableName($sourceEntity) . $this->classToTableName($targetEntity);
+                break;
+            case self::UNDERSCORE: // FALL TROUGH
+            default:
+                return $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity);
+                break;
         }
-
-        return $defaultName;
     }
 
     /**
@@ -154,18 +163,17 @@ class NamerCollection implements NamingStrategy
      */
     public function joinKeyColumnName($entityName, $referencedColumnName = null)
     {
-        $defaultName = $this->defaultNamer->joinKeyColumnName($entityName, $referencedColumnName);
-
-        /**
-         * @var NamingStrategy $concurrentNamer
-         */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
-
-            if (($newProposal = $concurrentNamer->joinKeyColumnName($entityName, $referencedColumnName)) != $defaultName) {
-                return $newProposal;
-            }
+        switch ($this->concatenation) {
+            case self::UCFIRST:
+                return $this->classToTableName($entityName) . ucfirst(($referencedColumnName ?: $this->referenceColumnName()));
+                break;
+            case self::NOTHING:
+                return $this->classToTableName($entityName) . ($referencedColumnName ?: $this->referenceColumnName());
+                break;
+            case self::UNDERSCORE: // FALL TROUGH
+            default:
+                return $this->classToTableName($entityName) . '_' . ($referencedColumnName ?: $this->referenceColumnName());
+                break;
         }
-
-        return $defaultName;
     }
 }

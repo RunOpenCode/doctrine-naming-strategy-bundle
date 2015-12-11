@@ -115,7 +115,7 @@ class Extension extends BaseExtension
                 new Reference($config['namer_collection']['default']),
                 array_map(function($namerId) {
                     return new Reference($namerId);
-                }, $config['namer_collection']['namers'])
+                }, $config['namer_collection']['namers'], $config['namer_collection']['concatenation'])
             ));
         }
 
