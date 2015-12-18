@@ -32,11 +32,23 @@ class NamerCollection implements NamingStrategy
      */
     protected $concatenation;
 
-    public function __construct(NamingStrategy $defaultNamer, array $concurrentNamers, $concatenation = self::UNDERSCORE)
+    /**
+     * @var bool
+     */
+    protected $joinTableFieldSuffix;
+
+    public function __construct(NamingStrategy $defaultNamer, array $concurrentNamers, array $configuration = array())
     {
         $this->defaultNamer = $defaultNamer;
         $this->concurrentNamers = $concurrentNamers;
-        $this->concatenation = $concatenation;
+        $configuration = array_merge(array(
+            'concatenation' => self::UNDERSCORE,
+            'joinTableFieldSuffix' => true
+        ), $configuration);
+
+        $this->concatenation = $configuration['concatenation'];
+        $this->joinTableFieldSuffix = $configuration['joinTableFieldSuffix'];
+
     }
 
     /**
@@ -146,14 +158,26 @@ class NamerCollection implements NamingStrategy
     {
         switch ($this->concatenation) {
             case self::UCFIRST:
-                return $this->classToTableName($sourceEntity) . ucfirst($this->classToTableName($targetEntity));
+                return
+                    $this->classToTableName($sourceEntity) . ucfirst($this->classToTableName($targetEntity))
+                    .
+                    (($this->joinTableFieldSuffix && $propertyName) ? ucfirst($this->propertyToColumnName($propertyName, $sourceEntity)) : '')
+                    ;
                 break;
             case self::NOTHING:
-                return $this->classToTableName($sourceEntity) . $this->classToTableName($targetEntity);
+                return
+                    $this->classToTableName($sourceEntity) . $this->classToTableName($targetEntity)
+                    .
+                    (($this->joinTableFieldSuffix && $propertyName) ? $this->propertyToColumnName($propertyName, $sourceEntity) : '')
+                    ;
                 break;
             case self::UNDERSCORE: // FALL TROUGH
             default:
-                return $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity);
+                return
+                    $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity)
+                    .
+                    (($this->joinTableFieldSuffix && $propertyName) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '')
+                    ;
                 break;
         }
     }

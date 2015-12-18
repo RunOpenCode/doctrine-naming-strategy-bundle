@@ -28,13 +28,19 @@ class UnderscoredClassNamespacePrefix extends UnderscoreNamingStrategy
      */
     protected $blacklist;
 
+    /**
+     * @var bool
+     */
+    protected $joinTableFieldSuffix;
+
     public function __construct(array $configuration = array())
     {
         $configuration = array_merge(array(
             'case' => CASE_LOWER,
             'map' => array(),
             'whitelist' => array(),
-            'blacklist' => array()
+            'blacklist' => array(),
+            'joinTableFieldSuffix' => true
         ), $configuration);
 
         if (count($configuration['whitelist']) > 0 && count($configuration['blacklist']) > 0) {
@@ -44,6 +50,7 @@ class UnderscoredClassNamespacePrefix extends UnderscoreNamingStrategy
         $this->map = $configuration['map'];
         $this->blacklist = $configuration['blacklist'];
         $this->whitelist = $configuration['whitelist'];
+        $this->joinTableFieldSuffix = $configuration['joinTableFieldSuffix'];
 
         parent::__construct($configuration['case']);
 
@@ -55,6 +62,17 @@ class UnderscoredClassNamespacePrefix extends UnderscoreNamingStrategy
     public function classToTableName($className)
     {
         return (($prefix = $this->getTableNamePrefix($className)) ? $prefix . '_' : '') . parent::classToTableName($className);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null)
+    {
+        return
+            parent::joinTableName($sourceEntity, $targetEntity, $propertyName)
+            .
+            (($this->joinTableFieldSuffix && $propertyName) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '');
     }
 
     /**

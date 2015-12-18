@@ -44,6 +44,25 @@ class UnderscoredClassNamespacePrefixTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function joinTableName()
+    {
+        $strategy = new UnderscoredClassNamespacePrefix(array(
+            'map' => array(
+                'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
+                'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
+            )
+        ));
+
+        $this->assertSame('my_prefix_some_entity_my_other_prefix_some_entity_field_name', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\TestNamespace\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\TestNamespace\\Other\\SomeEntity',
+            'fieldName'
+        ));
+    }
+
+    /**
+     * @test
      *
      * @expectedException \RuntimeException
      */

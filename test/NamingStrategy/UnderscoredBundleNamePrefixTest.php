@@ -46,6 +46,24 @@ class UnderscoredBundleNamePrefixTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     */
+    public function joinTableName()
+    {
+        $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), array(
+            'map' => array(
+                'DoctrineNamingStrategyBundle' => 'my_prefix',
+            )
+        ));
+
+        $this->assertSame('my_prefix_some_entity_my_prefix_other_entity_field_name', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Entity\\OtherEntity',
+            'fieldName'
+        ));
+    }
+
+    /**
+     * @test
      *
      * @expectedException \RuntimeException
      */
