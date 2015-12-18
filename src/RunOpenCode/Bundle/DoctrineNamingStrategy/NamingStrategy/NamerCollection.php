@@ -161,14 +161,14 @@ class NamerCollection implements NamingStrategy
                 return
                     $this->classToTableName($sourceEntity) . ucfirst($this->classToTableName($targetEntity))
                     .
-                    (($this->joinTableFieldSuffix && $propertyName) ? ucfirst($this->propertyToColumnName($propertyName, $sourceEntity)) : '')
+                    (($this->joinTableFieldSuffix && !empty($propertyName)) ? ucfirst($this->propertyToColumnName($propertyName, $sourceEntity)) : '')
                     ;
                 break;
             case self::NOTHING:
                 return
                     $this->classToTableName($sourceEntity) . $this->classToTableName($targetEntity)
                     .
-                    (($this->joinTableFieldSuffix && $propertyName) ? $this->propertyToColumnName($propertyName, $sourceEntity) : '')
+                    (($this->joinTableFieldSuffix && !empty($propertyName)) ? $this->propertyToColumnName($propertyName, $sourceEntity) : '')
                     ;
                 break;
             case self::UNDERSCORE: // FALL TROUGH
@@ -176,7 +176,7 @@ class NamerCollection implements NamingStrategy
                 return
                     $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity)
                     .
-                    (($this->joinTableFieldSuffix && $propertyName) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '')
+                    (($this->joinTableFieldSuffix && !empty($propertyName)) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '')
                     ;
                 break;
         }

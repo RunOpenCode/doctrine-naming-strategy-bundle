@@ -72,7 +72,7 @@ class UnderscoredClassNamespacePrefix extends UnderscoreNamingStrategy
         return
             parent::joinTableName($sourceEntity, $targetEntity, $propertyName)
             .
-            (($this->joinTableFieldSuffix && $propertyName) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '');
+            (($this->joinTableFieldSuffix && !empty($propertyName)) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '');
     }
 
     /**

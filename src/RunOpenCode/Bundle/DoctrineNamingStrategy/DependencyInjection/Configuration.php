@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
 
-        $rootNode = $treeBuilder->root('underscored_bundle_prefix');
+        $rootNode = $treeBuilder->root('run_open_code_doctrine_naming_strategy');
 
         $rootNode
             ->children()
@@ -38,7 +38,7 @@ class Configuration implements ConfigurationInterface
 
     protected function getUnderscoredBundlePrefixDefinition()
     {
-        $node = new ArrayNodeDefinition('run_open_code_doctrine_naming_strategy');
+        $node = new ArrayNodeDefinition('underscored_bundle_prefix');
 
         $node
             ->children()
