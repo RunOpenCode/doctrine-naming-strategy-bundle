@@ -23,7 +23,7 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
 
-        $rootNode = $treeBuilder->root('run_open_code_doctrine_naming_strategy');
+        $rootNode = $treeBuilder->root('underscored_bundle_prefix');
 
         $rootNode
             ->children()
