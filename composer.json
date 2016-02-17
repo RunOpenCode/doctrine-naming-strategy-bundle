@@ -36,6 +36,7 @@
     "require-dev": {
         "symfony/phpunit-bridge": "~2.7",
         "symfony/debug": "~2.7|~3.0",
-        "phpunit/phpunit": ">=4.8"
+        "phpunit/phpunit": "~4.8",
+        "matthiasnoback/symfony-dependency-injection-test": "^0.7.6"
     }
 }

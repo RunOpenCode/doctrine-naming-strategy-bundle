@@ -126,15 +126,17 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
 - `namers`: List of namers to use for proposing new, different name from name which was provided by default namer. Note that first different proposal wins.
 - `joinTableFieldSuffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
                           relations between same entities, so they do not have to set table name manually because of table name collisions. Default is true.
+- `concatenation`: Optional, string. How to concatenate generated table names for join table names between entities with different naming strategies. Default is underscore character.                         
  
  
 #### Configuration example
-         
-    namer_collection:
-        default: doctrine.orm.naming_strategy.underscore
-        namers:
-            - run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
-            - run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix            
+
+    run_open_code_doctrine_naming_strategy:         
+        namer_collection:
+            default: doctrine.orm.naming_strategy.underscore
+            namers:
+                - run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
+                - run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix            
             
             
             

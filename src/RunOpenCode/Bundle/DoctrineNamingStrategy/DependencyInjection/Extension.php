@@ -2,7 +2,7 @@
 /*
  * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
  *
- * (c) 2015 RunOpenCode
+ * (c) 2016 RunOpenCode
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -80,10 +80,10 @@ class Extension extends BaseExtension
         ) {
             $definition = $container->getDefinition('run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix');
 
-            if ($config['underscored_bundle_prefix']['case'] == 'uppercase') {
-                $config['underscored_bundle_prefix']['case'] = CASE_UPPER;
+            if ($config['underscored_class_namespace_prefix']['case'] == 'uppercase') {
+                $config['underscored_class_namespace_prefix']['case'] = CASE_UPPER;
             } else {
-                $config['underscored_bundle_prefix']['case'] = CASE_LOWER;
+                $config['underscored_class_namespace_prefix']['case'] = CASE_LOWER;
             }
 
             $args = $definition->getArguments();
@@ -115,10 +115,11 @@ class Extension extends BaseExtension
                 new Reference($config['namer_collection']['default']),
                 array_map(function($namerId) {
                     return new Reference($namerId);
-                }, $config['namer_collection']['namers'], array(
+                }, $config['namer_collection']['namers']),
+                array(
                     'concatenation' => $config['namer_collection']['concatenation'],
                     'joinTableFieldSuffix' => $config['namer_collection']['joinTableFieldSuffix']
-                ))
+                )
             ));
         }
 
