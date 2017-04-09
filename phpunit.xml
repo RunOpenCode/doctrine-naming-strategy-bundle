@@ -4,7 +4,7 @@
 
     <testsuites>
 
-        <testsuite name="Doctrine naming strategies tests">
+        <testsuite name="DoctrineNamingStrategyBundle test suite">
             <directory suffix="Test.php">./test/</directory>
         </testsuite>
 
@@ -17,5 +17,14 @@
         </whitelist>
 
     </filter>
+
+    <logging>
+        <log type="coverage-html" target="./build/coverage/html"/>
+        <log type="coverage-xml" target="./build/coverage/xml"/>
+        <log type="coverage-clover" target="./build/logs/clover.xml"/>
+        <log type="coverage-crap4j" target="./build/logs/crap4j.xml"/>
+        <log type="junit" target="./build/logs/junit.xml" logIncompleteSkipped="false"/>
+    </logging>
+
 
 </phpunit>

@@ -7,18 +7,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RunOpenCode\Bundle\DoctrineNamingStrategy;
+namespace RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\Fixtures\Bundles\Foo;
 
-use RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection\Extension;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class DoctrineNamingStrategyBundle extends Bundle
+class FooBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getContainerExtension()
-    {
-        return new Extension();
-    }
+
 }

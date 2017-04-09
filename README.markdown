@@ -30,11 +30,11 @@ keep good quality naming convention for your Entity tables, prevent table name c
 
 Provided naming strategies within the bundles are:
 
-- `run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix`: Extension of default, underscored, naming strategy, which will add a bundle name prefix
+- `runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix`: Extension of default, underscored, naming strategy, which will add a bundle name prefix
                                                                           to the generated table names.
-- `run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix`: Extension of default, underscored, naming strategy, which will add a configured prefix
+- `runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix`: Extension of default, underscored, naming strategy, which will add a configured prefix
                                                                                    to the generated table names of the Entities based on its namespace. 
-- `run_open_code.doctrine.orm.naming_strategy.namer_collection`: Namer collection is collection of several naming strategies, and one default naming strategy.
+- `runopencode.doctrine.orm.naming_strategy.namer_collection`: Namer collection is collection of several naming strategies, and one default naming strategy.
                                                                  Default naming strategy will define default name, and then others namers are consulted. 
                                                                  First namer in collection that provides different name from default one finally determines name.
                                                                  This will allow you to mix naming strategies, and in conjunction with white and black lists of provided namers
@@ -74,7 +74,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
 
 ## Naming strategies configuration options
 
-### Options for `run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix`
+### Options for `runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix`
 
 - `case`: Optional, enum, possible values: `lowercase` or `uppercase`. Default is `lowercase`.
 - `map`: Optional, array. List of bundle names and desired prefixes to use. Otherwise, namer will use full bundle name without "Bundle" at the end of the bundle name. This is quite useful 
@@ -88,7 +88,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
          
 #### Configuration example
          
-    run_open_code_doctrine_naming_strategy:
+    runopencode_doctrine_naming_strategy:
         underscored_bundle_prefix:
             case: lowercase
             map:
@@ -98,7 +98,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
                 - DoNotPrefixThisBundle         
 
 
-### Options for `run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix`
+### Options for `runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix`
 
 - `case`: Optional, enum, possible values: `lowercase` or `uppercase`. Default is `lowercase`.
 - `map`: Required, array. Map of FQCNs prefixes and table prefixes to use when namer stumbles upon Entity class under given FQCN prefix.
@@ -111,7 +111,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
 
 #### Configuration example
          
-    run_open_code_doctrine_naming_strategy:
+    runopencode_doctrine_naming_strategy:
         underscored_class_namespace_prefix:
             case: uppercase
             map:
@@ -120,7 +120,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
                 - My\Class\Namespace\Entity\ThisShouldBeSkipped
                 - My\Class\Namespace\Entity\ThisShouldBeSkippedAsWell
 
-### Options for `run_open_code.doctrine.orm.naming_strategy.namer_collection`       
+### Options for `runopencode.doctrine.orm.naming_strategy.namer_collection`       
 
 - `default`: Optional, default namer to use. Default value is Symfony default namer for ORM, `doctrine.orm.naming_strategy.underscore`.
 - `namers`: List of namers to use for proposing new, different name from name which was provided by default namer. Note that first different proposal wins.
@@ -131,12 +131,15 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
  
 #### Configuration example
 
-    run_open_code_doctrine_naming_strategy:         
+    runopencode_doctrine_naming_strategy:         
         namer_collection:
             default: doctrine.orm.naming_strategy.underscore
             namers:
-                - run_open_code.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
-                - run_open_code.doctrine.orm.naming_strategy.underscored_bundle_prefix            
-            
-            
-            
+                - runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
+                - runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix            
+
+## Known issues
+
+- Some DBMS have certain limitation in regards to number of characters in table and/or column names (per example,
+MySQL which allows 64 chars, [read this article for details](https://dev.mysql.com/doc/refman/5.7/en/identifiers.html)).
+Adding long prefixes can easily breach that limitation.

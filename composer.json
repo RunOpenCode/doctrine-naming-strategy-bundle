@@ -28,15 +28,23 @@
         }
     },
     "require": {
-        "php": ">=5.4",
-        "symfony/framework-bundle": "~2.3|~3.0",
-        "doctrine/doctrine-bundle": "~1.3",
-        "doctrine/orm": "~2.3"
+        "php": ">=7.0",
+        "symfony/framework-bundle": "~2.8|~3.0",
+        "doctrine/doctrine-bundle": "~1.6",
+        "doctrine/orm": "~2.5"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "~2.7",
+        "phpunit/phpunit": "~6.0",
+        "symfony/phpunit-bridge": "dev-master",
         "symfony/debug": "~2.7|~3.0",
-        "phpunit/phpunit": "~4.8",
-        "matthiasnoback/symfony-dependency-injection-test": "^0.7.6"
+        "matthiasnoback/symfony-dependency-injection-test": "~2.0",
+        "squizlabs/php_codesniffer": "~2.0",
+        "phploc/phploc": "dev-master",
+        "pdepend/pdepend" : "~2.5",
+        "phpmd/phpmd" : "@stable",
+        "sebastian/phpcpd": "dev-master",
+        "theseer/phpdox": "dev-master",
+        "escapestudios/symfony2-coding-standard": "~2.0",
+        "symfony/doctrine-bridge": "~3.0"
     }
 }
