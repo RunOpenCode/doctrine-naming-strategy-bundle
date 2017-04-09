@@ -11,21 +11,37 @@ namespace RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy;
 
 use Doctrine\ORM\Mapping\NamingStrategy;
 
+/**
+ * Class NamerCollection
+ *
+ * @package RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy
+ */
 class NamerCollection implements NamingStrategy
 {
+    /**
+     * Concatenate different naming strategy outputs with underscore character.
+     */
     const UNDERSCORE = 'underscore';
+
+    /**
+     * Concatenate different naming strategy outputs without any character.
+     */
     const NOTHING = 'nothing';
+
+    /**
+     * Concatenate different naming strategy outputs with camel casing.
+     */
     const UCFIRST = 'ucfirst';
 
     /**
      * @var NamingStrategy
      */
-    protected $defaultNamer;
+    protected $defaultNamingStrategy;
 
     /**
      * @var NamingStrategy[]
      */
-    protected $concurrentNamers;
+    protected $concurrentNamingStrategies;
 
     /**
      * @var string
@@ -37,18 +53,36 @@ class NamerCollection implements NamingStrategy
      */
     protected $joinTableFieldSuffix;
 
-    public function __construct(NamingStrategy $defaultNamer, array $concurrentNamers, array $configuration = array())
+    public function __construct(NamingStrategy $defaultNamingStrategy, array $concurrentNamingStrategies = [], array $configuration = [])
     {
-        $this->defaultNamer = $defaultNamer;
-        $this->concurrentNamers = $concurrentNamers;
-        $configuration = array_merge(array(
+        $this->defaultNamingStrategy = $defaultNamingStrategy;
+
+        $this->concurrentNamingStrategies = [];
+
+        foreach ($concurrentNamingStrategies as $namingStrategy) {
+            $this->registerNamingStrategy($namingStrategy);
+        }
+
+        $configuration = array_merge([
             'concatenation' => self::UNDERSCORE,
             'joinTableFieldSuffix' => true
-        ), $configuration);
+        ], $configuration);
 
         $this->concatenation = $configuration['concatenation'];
         $this->joinTableFieldSuffix = $configuration['joinTableFieldSuffix'];
+    }
 
+    /**
+     * Register naming strategy.
+     *
+     * @param NamingStrategy $namingStrategy
+     *
+     * @return NamerCollection $this
+     */
+    public function registerNamingStrategy(NamingStrategy $namingStrategy)
+    {
+        $this->concurrentNamingStrategies[] = $namingStrategy;
+        return $this;
     }
 
     /**
@@ -56,14 +90,14 @@ class NamerCollection implements NamingStrategy
      */
     public function classToTableName($className)
     {
-        $defaultName = $this->defaultNamer->classToTableName($className);
+        $defaultName = $this->defaultNamingStrategy->classToTableName($className);
 
         /**
          * @var NamingStrategy $concurrentNamer
          */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
+        foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
 
-            if (($newProposal = $concurrentNamer->classToTableName($className)) != $defaultName) {
+            if (($newProposal = $concurrentNamer->classToTableName($className)) !== $defaultName) {
                 return $newProposal;
             }
         }
@@ -76,14 +110,14 @@ class NamerCollection implements NamingStrategy
      */
     public function propertyToColumnName($propertyName, $className = null)
     {
-        $defaultName = $this->defaultNamer->propertyToColumnName($propertyName, $className);
+        $defaultName = $this->defaultNamingStrategy->propertyToColumnName($propertyName, $className);
 
         /**
          * @var NamingStrategy $concurrentNamer
          */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
+        foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
 
-            if (($newProposal = $concurrentNamer->propertyToColumnName($propertyName, $className)) != $defaultName) {
+            if (($newProposal = $concurrentNamer->propertyToColumnName($propertyName, $className)) !== $defaultName) {
                 return $newProposal;
             }
         }
@@ -96,12 +130,12 @@ class NamerCollection implements NamingStrategy
      */
     public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null)
     {
-        $defaultName = $this->defaultNamer->embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className, $embeddedClassName);
+        $defaultName = $this->defaultNamingStrategy->embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className, $embeddedClassName);
 
         /**
          * @var NamingStrategy $concurrentNamer
          */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
+        foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
 
             if (($newProposal = $concurrentNamer->embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className, $embeddedClassName)) != $defaultName) {
                 return $newProposal;
@@ -116,12 +150,12 @@ class NamerCollection implements NamingStrategy
      */
     public function referenceColumnName()
     {
-        $defaultName = $this->defaultNamer->referenceColumnName();
+        $defaultName = $this->defaultNamingStrategy->referenceColumnName();
 
         /**
          * @var NamingStrategy $concurrentNamer
          */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
+        foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
 
             if (($newProposal = $concurrentNamer->referenceColumnName()) != $defaultName) {
                 return $newProposal;
@@ -136,12 +170,12 @@ class NamerCollection implements NamingStrategy
      */
     public function joinColumnName($propertyName/*, $className = null*/)
     {
-        $defaultName = $this->defaultNamer->joinColumnName($propertyName/*, $className */);
+        $defaultName = $this->defaultNamingStrategy->joinColumnName($propertyName/*, $className */);
 
         /**
          * @var NamingStrategy $concurrentNamer
          */
-        foreach ($this->concurrentNamers as $concurrentNamer) {
+        foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
 
             if (($newProposal = $concurrentNamer->joinColumnName($propertyName/*, $className */)) != $defaultName) {
                 return $newProposal;

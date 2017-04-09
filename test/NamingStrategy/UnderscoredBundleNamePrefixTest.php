@@ -132,12 +132,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
      */
     public function joinColumnNameLowercase()
     {
-        $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
-                'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
-            ],
-        ]);
+        $strategy = new UnderscoredBundleNamePrefix($this->mockKernel());
 
         $this->assertSame('a_property_id', $strategy->joinColumnName('aProperty'));
     }
@@ -148,10 +143,6 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     public function joinColumnNameUppercase()
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
-                'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
-            ],
             'case' => CASE_UPPER,
         ]);
 
@@ -170,8 +161,15 @@ class UnderscoredBundleNamePrefixTest extends TestCase
             ],
         ]);
 
-        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity', 'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'));
-        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity_a_property', $strategy->joinTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity', 'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity', 'aProperty'));
+        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'
+        ));
+        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity_a_property', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity',
+            'aProperty'
+        ));
     }
 
     /**
@@ -187,8 +185,15 @@ class UnderscoredBundleNamePrefixTest extends TestCase
             'case' => CASE_UPPER
         ]);
 
-        $this->assertSame('FOO_PREFIX_SOME_ENTITY_PREFIX_BAR_OTHER_ENTITY', $strategy->joinTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity', 'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'));
-        $this->assertSame('FOO_PREFIX_SOME_ENTITY_PREFIX_BAR_OTHER_ENTITY_A_PROPERTY', $strategy->joinTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity', 'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity', 'aProperty'));
+        $this->assertSame('FOO_PREFIX_SOME_ENTITY_PREFIX_BAR_OTHER_ENTITY', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'
+        ));
+        $this->assertSame('FOO_PREFIX_SOME_ENTITY_PREFIX_BAR_OTHER_ENTITY_A_PROPERTY', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity',
+            'aProperty'
+        ));
     }
 
     /**
@@ -204,8 +209,15 @@ class UnderscoredBundleNamePrefixTest extends TestCase
             'joinTableFieldSuffix' => false
         ]);
 
-        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity', 'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'));
-        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity', 'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity', 'aProperty'));
+        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'
+        ));
+        $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity',
+            'aProperty'
+        ));
     }
 
     /**

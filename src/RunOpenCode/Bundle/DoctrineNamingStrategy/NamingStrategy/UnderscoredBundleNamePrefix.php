@@ -14,6 +14,11 @@ use RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
+/**
+ * Class UnderscoredBundleNamePrefix
+ *
+ * @package RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy
+ */
 class UnderscoredBundleNamePrefix implements NamingStrategy
 {
     /**
@@ -33,13 +38,13 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
 
     public function __construct(KernelInterface $kernel, array $options = array())
     {
-        $options = array_merge(array(
+        $options = array_merge([
             'case' => CASE_LOWER,
-            'map' => array(),
-            'whitelist' => array(),
-            'blacklist' => array(),
-            'joinTableFieldSuffix' => true
-        ), $options);
+            'map' => [],
+            'whitelist' => [],
+            'blacklist' => [],
+            'joinTableFieldSuffix' => true,
+        ], $options);
 
         if (count($options['whitelist']) > 0 && count($options['blacklist']) > 0) {
             throw new RuntimeException('You can use whitelist or blacklist or none of mentioned lists, but not booth.');
