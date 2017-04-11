@@ -107,7 +107,7 @@ class Configuration implements ConfigurationInterface
 
     protected function getNamerCollectionDefinition()
     {
-        $node = new ArrayNodeDefinition('namer_collection');
+        $node = new ArrayNodeDefinition('underscored_namer_collection');
 
         $node
             ->children()
@@ -119,11 +119,6 @@ class Configuration implements ConfigurationInterface
                     ->requiresAtLeastOneElement()
                     ->info('Concurrent namers (referenced as service) which will propose different name, if applicable.')
                     ->prototype('scalar')->end()
-                ->end()
-                ->enumNode('concatenation')
-                    ->info('How to concatenate join table names and join key column names considering that different naming strategies can be included in mix.')
-                    ->values(array(NamerCollection::UNDERSCORE, NamerCollection::NOTHING, NamerCollection::UCFIRST))
-                    ->defaultValue(NamerCollection::UNDERSCORE)
                 ->end()
                 ->booleanNode('joinTableFieldSuffix')
                     ->defaultTrue()

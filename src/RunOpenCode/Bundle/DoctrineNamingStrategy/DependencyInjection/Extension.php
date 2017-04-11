@@ -121,7 +121,7 @@ class Extension extends BaseExtension
     }
 
     /**
-     * Configure 'runopencode.doctrine.orm.naming_strategy.namer_collection' naming strategy.
+     * Configure 'runopencode.doctrine.orm.naming_strategy.underscored_namer_collection' naming strategy.
      *
      * @param ContainerBuilder $container
      * @param array $config
@@ -130,20 +130,19 @@ class Extension extends BaseExtension
     private function configureNamerCollection(ContainerBuilder $container, array $config)
     {
         if (
-            $container->hasDefinition('runopencode.doctrine.orm.naming_strategy.namer_collection')
+            $container->hasDefinition('runopencode.doctrine.orm.naming_strategy.underscored_namer_collection')
             &&
-            isset($config['namer_collection'])
+            isset($config['underscored_namer_collection'])
         ) {
-            $definition = $container->getDefinition('runopencode.doctrine.orm.naming_strategy.namer_collection');
+            $definition = $container->getDefinition('runopencode.doctrine.orm.naming_strategy.underscored_namer_collection');
 
             $definition->setArguments(array(
-                new Reference($config['namer_collection']['default']),
+                new Reference($config['underscored_namer_collection']['default']),
                 array_map(function($namerId) {
                     return new Reference($namerId);
-                }, $config['namer_collection']['namers']),
+                }, $config['underscored_namer_collection']['namers']),
                 array(
-                    'concatenation' => $config['namer_collection']['concatenation'],
-                    'joinTableFieldSuffix' => $config['namer_collection']['joinTableFieldSuffix']
+                    'joinTableFieldSuffix' => $config['underscored_namer_collection']['joinTableFieldSuffix']
                 )
             ));
         }

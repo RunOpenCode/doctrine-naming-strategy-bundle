@@ -91,25 +91,23 @@ class ExtensionTest extends AbstractExtensionTestCase
                 'runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix',
                 'runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix'
             ),
-            'concatenation' => NamerCollection::UNDERSCORE,
             'joinTableFieldSuffix' => true
         );
 
-        $this->load(array('namer_collection' => $configuration));
+        $this->load(array('underscored_namer_collection' => $configuration));
 
-        $this->assertContainerBuilderHasService('runopencode.doctrine.orm.naming_strategy.namer_collection');
+        $this->assertContainerBuilderHasService('runopencode.doctrine.orm.naming_strategy.underscored_namer_collection');
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'runopencode.doctrine.orm.naming_strategy.namer_collection',
+            'runopencode.doctrine.orm.naming_strategy.underscored_namer_collection',
             1,
             $configuration['namers']
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'runopencode.doctrine.orm.naming_strategy.namer_collection',
+            'runopencode.doctrine.orm.naming_strategy.underscored_namer_collection',
             2,
             array(
-                'concatenation' => $configuration['concatenation'],
                 'joinTableFieldSuffix' => $configuration['joinTableFieldSuffix']
             )
         );
