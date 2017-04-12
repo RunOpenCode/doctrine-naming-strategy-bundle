@@ -95,6 +95,31 @@ class UnderscoredNamerCollectionTest extends TestCase
         ));
     }
 
+    /**
+     * @test
+     */
+    public function joinKeyColumnName()
+    {
+        $namer = $this->getNamerCollection();
+
+        $this->assertSame('foo_bundle_prefix_some_entity_id', $namer->joinKeyColumnName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'
+        ));
+
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME_ID', $namer->joinKeyColumnName(
+            'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'
+        ));
+
+        $this->assertSame('foo_bundle_prefix_some_entity_key_column', $namer->joinKeyColumnName(
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'keyColumn'
+        ));
+
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME_KEY_COLUMN', $namer->joinKeyColumnName(
+            'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name',
+            'keyColumn'
+        ));
+    }
 
 
     private function getNamerCollection($joinTableFieldSuffix = true)

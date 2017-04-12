@@ -133,7 +133,9 @@ class UnderscoredNamerCollection implements NamingStrategy
      */
     public function joinKeyColumnName($entityName, $referencedColumnName = null)
     {
-        return $this->classToTableName($entityName) . '_' . ($referencedColumnName ?: $this->referenceColumnName());
+        $namer = $this->findNamer($entityName);
+
+        return $namer->classToTableName($entityName) . '_' . ($namer->propertyToColumnName($referencedColumnName) ?: $namer->referenceColumnName());
     }
 
 

@@ -1,0 +1,26 @@
+runopencode_doctrine_naming_strategy:
+
+    underscored_bundle_prefix:
+        case: uppercase
+        joinTableFieldSuffix: false
+        map:
+            MyLongNameOfTheBundle: my_prefix
+            MyOtherLongNameOfTheBundle: my_prefix_2
+        blacklist:
+            - DoNotPrefixThisBundle
+
+    underscored_class_namespace_prefix:
+        case: uppercase
+        joinTableFieldSuffix: false
+        map:
+            My\Class\Namespace\Entity: my_prefix
+        blacklist:
+            - My\Class\Namespace\Entity\ThisShouldBeSkipped
+            - My\Class\Namespace\Entity\ThisShouldBeSkippedAsWell
+
+    underscored_namer_collection:
+        default: doctrine.orm.naming_strategy.underscore
+        joinTableFieldSuffix: false
+        namers:
+            - runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
+            - runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix

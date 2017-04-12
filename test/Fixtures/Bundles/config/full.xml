@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+
+<container
+        xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:run-open-code-doctrine-naming-strategy-bundle="http://www.runopencode.com/xsd-schema/doctrine-naming-strategy-bundle"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services
+                            http://symfony.com/schema/dic/services/services-1.0.xsd
+                            http://www.runopencode.com/xsd-schema/doctrine-naming-strategy-bundle
+                            http://www.runopencode.com/xsd-schema/doctrine-naming-strategy-bundle/configuration-1.0.0.xsd
+                            "
+>
+
+    <run-open-code-doctrine-naming-strategy-bundle:config>
+
+        <run-open-code-doctrine-naming-strategy-bundle:underscored-namer-collection default="default_namer" join-table-field-suffix="false">
+            <run-open-code-doctrine-naming-strategy-bundle:namer>first_namer</run-open-code-doctrine-naming-strategy-bundle:namer>
+        </run-open-code-doctrine-naming-strategy-bundle:underscored-namer-collection>
+
+        <run-open-code-doctrine-naming-strategy-bundle:underscored-bundle-prefix join-table-field-suffix="false" case="uppercase">
+
+            <run-open-code-doctrine-naming-strategy-bundle:map bundle="SomeBundle">some_prefix</run-open-code-doctrine-naming-strategy-bundle:map>
+            <run-open-code-doctrine-naming-strategy-bundle:map bundle="SomeOtherBundle">some_other_prefix</run-open-code-doctrine-naming-strategy-bundle:map>
+
+            <run-open-code-doctrine-naming-strategy-bundle:blacklist>ExcludedBundle</run-open-code-doctrine-naming-strategy-bundle:blacklist>
+
+        </run-open-code-doctrine-naming-strategy-bundle:underscored-bundle-prefix>
+
+        <run-open-code-doctrine-naming-strategy-bundle:underscored-class-namespace-prefix join-table-field-suffix="false" case="uppercase">
+
+            <run-open-code-doctrine-naming-strategy-bundle:map namespace="Some\Namespace">some_prefix</run-open-code-doctrine-naming-strategy-bundle:map>
+            <run-open-code-doctrine-naming-strategy-bundle:map namespace="Some\Other\Namespace">some_other_prefix</run-open-code-doctrine-naming-strategy-bundle:map>
+
+            <run-open-code-doctrine-naming-strategy-bundle:whitelist>Some\Namespace</run-open-code-doctrine-naming-strategy-bundle:whitelist>
+            <run-open-code-doctrine-naming-strategy-bundle:whitelist>Some\Other\Namespace</run-open-code-doctrine-naming-strategy-bundle:whitelist>
+
+        </run-open-code-doctrine-naming-strategy-bundle:underscored-class-namespace-prefix>
+
+    </run-open-code-doctrine-naming-strategy-bundle:config>
+
+</container>

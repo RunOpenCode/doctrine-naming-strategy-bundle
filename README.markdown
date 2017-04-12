@@ -31,10 +31,10 @@ keep good quality naming convention for your Entity tables, prevent table name c
 Provided naming strategies within the bundles are:
 
 - `runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix`: Extension of default, underscored, naming strategy, which will add a bundle name prefix
-                                                                          to the generated table names.
+                                                                          to the generated table names (without "bundle" in prefix).
 - `runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix`: Extension of default, underscored, naming strategy, which will add a configured prefix
                                                                                    to the generated table names of the Entities based on its namespace. 
-- `runopencode.doctrine.orm.naming_strategy.namer_collection`: Namer collection is collection of several naming strategies, and one default naming strategy.
+- `runopencode.doctrine.orm.naming_strategy.underscored_namer_collection`: Underscored namer collection is collection of several naming strategies, and one default naming strategy.
                                                                  Default naming strategy will define default name, and then others namers are consulted. 
                                                                  First namer in collection that provides different name from default one finally determines name.
                                                                  This will allow you to mix naming strategies, and in conjunction with white and black lists of provided namers
@@ -120,19 +120,18 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
                 - My\Class\Namespace\Entity\ThisShouldBeSkipped
                 - My\Class\Namespace\Entity\ThisShouldBeSkippedAsWell
 
-### Options for `runopencode.doctrine.orm.naming_strategy.namer_collection`       
+### Options for `runopencode.doctrine.orm.naming_strategy.underscored_namer_collection`
 
 - `default`: Optional, default namer to use. Default value is Symfony default namer for ORM, `doctrine.orm.naming_strategy.underscore`.
 - `namers`: List of namers to use for proposing new, different name from name which was provided by default namer. Note that first different proposal wins.
 - `joinTableFieldSuffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
                           relations between same entities, so they do not have to set table name manually because of table name collisions. Default is true.
-- `concatenation`: Optional, string. How to concatenate generated table names for join table names between entities with different naming strategies. Default is underscore character.                         
  
  
 #### Configuration example
 
     runopencode_doctrine_naming_strategy:         
-        namer_collection:
+        underscored_namer_collection:
             default: doctrine.orm.naming_strategy.underscore
             namers:
                 - runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix
