@@ -81,7 +81,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
          if you are using, per example, MySQL which has table name limit to up to 60 chars.
 - `whitelist`: Optional, array. List of bundles for which prefix to the table name should be added.
 - `blacklist`: Optional, array. Oposite of whitelist, list of bundles for which prefix to the table name should not be added.
-- `joinTableFieldSuffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
+- `join_table_field_suffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
                           relations between same entities, so they do not have to set table name manually because of table name collisions. Default is true. 
          
 **NOTE:** You can either use `whitelist` or `blacklist` or none, but never booth.
@@ -104,7 +104,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
 - `map`: Required, array. Map of FQCNs prefixes and table prefixes to use when namer stumbles upon Entity class under given FQCN prefix.
 - `whitelist`: Optional, array. List of FQCNs prefixes for which prefix to the table name should be added.
 - `blacklist`: Optional, array. Oposite of whitelist, list of FQCNs prefixes for which prefix to the table name should not be added.
-- `joinTableFieldSuffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
+- `join_table_field_suffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
                           relations between same entities, so they do not have to set table name manually because of table name collisions. Default is true.
          
 **NOTE:** You can either use `whitelist` or `blacklist` or none, but never booth.
@@ -124,7 +124,7 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
 
 - `default`: Optional, default namer to use. Default value is Symfony default namer for ORM, `doctrine.orm.naming_strategy.underscore`.
 - `namers`: List of namers to use for proposing new, different name from name which was provided by default namer. Note that first different proposal wins.
-- `joinTableFieldSuffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
+- `join_table_field_suffix`: Optional, boolean. Whether to add field name as suffix to join table name. It is very useful to lazy developers when they have multiple many-to-many
                           relations between same entities, so they do not have to set table name manually because of table name collisions. Default is true.
  
  

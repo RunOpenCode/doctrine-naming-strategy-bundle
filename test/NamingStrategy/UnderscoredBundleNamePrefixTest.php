@@ -206,7 +206,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
                 'FooBundle' => 'foo_prefix',
                 'Bar' => 'prefix_bar'
             ],
-            'joinTableFieldSuffix' => false
+            'join_table_field_suffix' => false
         ]);
 
         $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName(

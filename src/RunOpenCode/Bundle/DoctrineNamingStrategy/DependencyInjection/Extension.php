@@ -74,11 +74,7 @@ class Extension extends BaseExtension
         ) {
             $definition = $container->getDefinition('runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix');
 
-            if ('uppercase' === $config['underscored_bundle_prefix']['case']) {
-                $config['underscored_bundle_prefix']['case'] = CASE_UPPER;
-            } else {
-                $config['underscored_bundle_prefix']['case'] = CASE_LOWER;
-            }
+            $config['underscored_bundle_prefix']['case'] = ('uppercase' === $config['underscored_bundle_prefix']['case']) ? CASE_UPPER : CASE_LOWER;
 
             $args = $definition->getArguments();
             $args[1] = $config['underscored_bundle_prefix'];
@@ -105,11 +101,7 @@ class Extension extends BaseExtension
         ) {
             $definition = $container->getDefinition('runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix');
 
-            if ('uppercase' === $config['underscored_class_namespace_prefix']['case']) {
-                $config['underscored_class_namespace_prefix']['case'] = CASE_UPPER;
-            } else {
-                $config['underscored_class_namespace_prefix']['case'] = CASE_LOWER;
-            }
+            $config['underscored_class_namespace_prefix']['case'] = ('uppercase' === $config['underscored_class_namespace_prefix']['case']) ? CASE_UPPER : CASE_LOWER;
 
             $args = $definition->getArguments();
             $args[0] = $config['underscored_class_namespace_prefix'];
@@ -138,11 +130,11 @@ class Extension extends BaseExtension
 
             $definition->setArguments(array(
                 new Reference($config['underscored_namer_collection']['default']),
-                array_map(function($namerId) {
+                array_map(function ($namerId) {
                     return new Reference($namerId);
                 }, $config['underscored_namer_collection']['namers']),
                 array(
-                    'joinTableFieldSuffix' => $config['underscored_namer_collection']['joinTableFieldSuffix']
+                    'join_table_field_suffix' => $config['underscored_namer_collection']['join_table_field_suffix'],
                 )
             ));
         }

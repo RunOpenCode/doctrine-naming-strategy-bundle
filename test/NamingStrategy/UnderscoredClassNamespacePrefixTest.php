@@ -201,7 +201,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
                 'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
             ],
-            'joinTableFieldSuffix' => false,
+            'join_table_field_suffix' => false,
         ]);
 
         $this->assertSame('my_prefix_some_entity_my_other_prefix_some_entity', $strategy->joinTableName(

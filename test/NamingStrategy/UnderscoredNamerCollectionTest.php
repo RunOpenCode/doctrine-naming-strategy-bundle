@@ -21,15 +21,33 @@ use RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\Fixtures\Bundles\Foo\FooBund
 class UnderscoredNamerCollectionTest extends TestCase
 {
     /**
+     * @var UnderscoredNamerCollection
+     */
+    private $namer;
+
+    public function setUp()
+    {
+        $this->namer = $this->getNamerCollection();
+    }
+
+    /**
+     * @test
+     * @expectedException \RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\InvalidArgumentException
+     */
+    public function defaultNamingStrategyCanNotBeRegisteredAsConcurentOne()
+    {
+        $namingStrategy = new UnderscoredNamerCollection($default = new UnderscoreNamingStrategy());
+        $namingStrategy->registerNamingStrategy($default);
+    }
+
+    /**
      * @test
      */
     public function classToTableName()
     {
-        $namer = $this->getNamerCollection();
-
-        $this->assertSame('name', $namer->classToTableName('Some\\Unregistered\\Name'));
-        $this->assertSame('FIRST_CLASS_PREFIX_NAME', $namer->classToTableName('RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'));
-        $this->assertSame('foo_bundle_prefix_some_entity', $namer->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'));
+        $this->assertSame('name', $this->namer->classToTableName('Some\\Unregistered\\Name'));
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME', $this->namer->classToTableName('RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'));
+        $this->assertSame('foo_bundle_prefix_some_entity', $this->namer->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'));
     }
 
     /**
@@ -37,11 +55,9 @@ class UnderscoredNamerCollectionTest extends TestCase
      */
     public function propertyToColumnName()
     {
-        $namer = $this->getNamerCollection();
-
-        $this->assertSame('test_property', $namer->propertyToColumnName('testProperty'));
-        $this->assertSame('test_property', $namer->propertyToColumnName('testProperty', 'Some\\Unregistered\\Name'));
-        $this->assertSame('TEST_PROPERTY', $namer->propertyToColumnName('testProperty','RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'));
+        $this->assertSame('test_property', $this->namer->propertyToColumnName('testProperty'));
+        $this->assertSame('test_property', $this->namer->propertyToColumnName('testProperty', 'Some\\Unregistered\\Name'));
+        $this->assertSame('TEST_PROPERTY', $this->namer->propertyToColumnName('testProperty','RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'));
     }
 
     /**
@@ -49,20 +65,18 @@ class UnderscoredNamerCollectionTest extends TestCase
      */
     public function embeddedFieldToColumnName()
     {
-        $namer = $this->getNamerCollection();
-
-        $this->assertSame('test_property_testEmbeddedProperty', $namer->embeddedFieldToColumnName(
+        $this->assertSame('test_property_testEmbeddedProperty', $this->namer->embeddedFieldToColumnName(
             'testProperty',
             'testEmbeddedProperty'
         ));
 
-        $this->assertSame('TEST_PROPERTY_TEST_EMBEDDED_PROPERTY', $namer->embeddedFieldToColumnName(
+        $this->assertSame('TEST_PROPERTY_TEST_EMBEDDED_PROPERTY', $this->namer->embeddedFieldToColumnName(
             'testProperty',
             'testEmbeddedProperty',
             'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'
         ));
 
-        $this->assertSame('test_property_test_embedded_property', $namer->embeddedFieldToColumnName(
+        $this->assertSame('test_property_test_embedded_property', $this->namer->embeddedFieldToColumnName(
             'testProperty',
             'testEmbeddedProperty',
             'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name',
@@ -75,7 +89,7 @@ class UnderscoredNamerCollectionTest extends TestCase
      */
     public function referenceColumnName()
     {
-        $this->assertSame('id', $this->getNamerCollection()->referenceColumnName());
+        $this->assertSame('id', $this->namer->referenceColumnName());
     }
 
     /**
@@ -83,15 +97,30 @@ class UnderscoredNamerCollectionTest extends TestCase
      */
     public function joinColumnName()
     {
-        $namer = $this->getNamerCollection();
-
-        $this->assertSame('test_property_id', $namer->joinColumnName(
+        $this->assertSame('test_property_id', $this->namer->joinColumnName(
             'testProperty'
         ));
 
-        $this->assertSame('TEST_PROPERTY_ID', $namer->joinColumnName(
+        $this->assertSame('TEST_PROPERTY_ID', $this->namer->joinColumnName(
             'testProperty',
             'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'
+        ));
+    }
+
+    /**
+     * @test
+     */
+    public function joinTableName()
+    {
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME_foo_bundle_prefix_some_entity', $this->namer->joinTableName(
+            'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'
+        ));
+
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME_foo_bundle_prefix_some_entity_A_PROPERTY', $this->namer->joinTableName(
+            'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name',
+            'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
+            'aProperty'
         ));
     }
 
@@ -102,37 +131,32 @@ class UnderscoredNamerCollectionTest extends TestCase
     {
         $namer = $this->getNamerCollection();
 
-        $this->assertSame('foo_bundle_prefix_some_entity_id', $namer->joinKeyColumnName(
+        $this->assertSame('foo_bundle_prefix_some_entity_id', $this->namer->joinKeyColumnName(
             'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'
         ));
 
-        $this->assertSame('FIRST_CLASS_PREFIX_NAME_ID', $namer->joinKeyColumnName(
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME_ID', $this->namer->joinKeyColumnName(
             'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name'
         ));
 
-        $this->assertSame('foo_bundle_prefix_some_entity_key_column', $namer->joinKeyColumnName(
+        $this->assertSame('foo_bundle_prefix_some_entity_key_column', $this->namer->joinKeyColumnName(
             'RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity',
             'keyColumn'
         ));
 
-        $this->assertSame('FIRST_CLASS_PREFIX_NAME_KEY_COLUMN', $namer->joinKeyColumnName(
+        $this->assertSame('FIRST_CLASS_PREFIX_NAME_KEY_COLUMN', $this->namer->joinKeyColumnName(
             'RunOpenCode\\Bundle\\TestNamespace\\Entity\\Name',
             'keyColumn'
         ));
     }
 
-
-    private function getNamerCollection($joinTableFieldSuffix = true)
+    private function getNamerCollection()
     {
-        $namingStrategy = new UnderscoredNamerCollection(new UnderscoreNamingStrategy(), [], [
-            'joinTableFieldSuffix' => $joinTableFieldSuffix,
-        ]);
-
         $bundleLowercase = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'map' => [
                 'FooBundle' => 'foo_bundle_prefix',
             ],
-            'joinTableFieldSuffix' => false,
+            'join_table_field_suffix' => false,
             'case' => CASE_LOWER,
         ]);
 
@@ -140,7 +164,7 @@ class UnderscoredNamerCollectionTest extends TestCase
             'map' => [
                 'Bar' => 'bar_bundle_prefix',
             ],
-            'joinTableFieldSuffix' => true,
+            'join_table_field_suffix' => true,
             'case' => CASE_UPPER,
         ]);
 
@@ -148,7 +172,7 @@ class UnderscoredNamerCollectionTest extends TestCase
             'map' => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'second_class_prefix',
             ],
-            'joinTableFieldSuffix' => false,
+            'join_table_field_suffix' => false,
             'case' => CASE_LOWER,
         ]);
 
@@ -157,14 +181,15 @@ class UnderscoredNamerCollectionTest extends TestCase
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'first_class_prefix',
             ],
             'case' => CASE_UPPER,
-            'joinTableFieldSuffix' => true,
+            'join_table_field_suffix' => true,
         ]);
 
-        $namingStrategy
-            ->registerNamingStrategy($bundleLowercase)
-            ->registerNamingStrategy($bundleUppercase)
-            ->registerNamingStrategy($fqcnLowercase)
-            ->registerNamingStrategy($fqcnUppercase);
+        $namingStrategy = new UnderscoredNamerCollection(new UnderscoreNamingStrategy(), [
+            $bundleLowercase,
+            $bundleUppercase,
+            $fqcnLowercase,
+            $fqcnUppercase
+        ]);
 
         return $namingStrategy;
     }

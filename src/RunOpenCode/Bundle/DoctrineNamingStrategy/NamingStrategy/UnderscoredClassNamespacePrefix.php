@@ -44,6 +44,11 @@ class UnderscoredClassNamespacePrefix implements NamingStrategy
      */
     protected $map;
 
+    /**
+     * UnderscoredClassNamespacePrefix constructor.
+     *
+     * @param array $configuration
+     */
     public function __construct(array $configuration = array())
     {
         $configuration = array_merge([
@@ -51,7 +56,7 @@ class UnderscoredClassNamespacePrefix implements NamingStrategy
             'map' => [],
             'whitelist' => [],
             'blacklist' => [],
-            'joinTableFieldSuffix' => true
+            'join_table_field_suffix' => true,
         ], $configuration);
 
         if (count($configuration['whitelist']) > 0 && count($configuration['blacklist']) > 0) {
@@ -68,7 +73,7 @@ class UnderscoredClassNamespacePrefix implements NamingStrategy
         $this->whitelist = array_map(function($fqcn) {
             return ltrim($fqcn, '\\');
         }, $configuration['whitelist']);
-        $this->joinTableFieldSuffix = $configuration['joinTableFieldSuffix'];
+        $this->joinTableFieldSuffix = $configuration['join_table_field_suffix'];
     }
 
     /**
@@ -114,7 +119,7 @@ class UnderscoredClassNamespacePrefix implements NamingStrategy
      */
     public function joinColumnName($propertyName, $className = null)
     {
-        return $this->underscore($propertyName) . '_' . $this->referenceColumnName();
+        return $this->underscore($propertyName).'_'.$this->referenceColumnName();
     }
 
     /**

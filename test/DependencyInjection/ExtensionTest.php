@@ -11,8 +11,6 @@ namespace RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection\Extension;
-use RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\NamerCollection;
-use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
 class ExtensionTest extends AbstractExtensionTestCase
 {
@@ -21,31 +19,34 @@ class ExtensionTest extends AbstractExtensionTestCase
      */
     public function configureUnderscoredBundlePrefixNamer()
     {
-        $configuration = array(
-            'case' => 'lowercase',
-            'map' => array(
-                'MyLongNameOfTheBundle' => 'my_prefix',
-                'MyOtherLongNameOfTheBundle' => 'my_prefix_2'
-            ),
-            'joinTableFieldSuffix' => true,
-            'blacklist' =>
-                array(
-                    'DoNotPrefixThisBundle'
+        foreach (['lowercase', 'uppercase'] as $case) {
+
+            $configuration = array(
+                'case' => $case,
+                'map' => array(
+                    'MyLongNameOfTheBundle' => 'my_prefix',
+                    'MyOtherLongNameOfTheBundle' => 'my_prefix_2'
                 ),
-            'whitelist' => array()
-        );
+                'join_table_field_suffix' => true,
+                'blacklist' =>
+                    array(
+                        'DoNotPrefixThisBundle'
+                    ),
+                'whitelist' => array()
+            );
 
-        $this->load(array('underscored_bundle_prefix' => $configuration));
+            $this->load(array('underscored_bundle_prefix' => $configuration));
 
-        $this->assertContainerBuilderHasService('runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix');
+            $this->assertContainerBuilderHasService('runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix');
 
-        $configuration['case'] = CASE_LOWER;
+            $configuration['case'] = ('uppercase' === $case) ? CASE_UPPER : CASE_LOWER;
 
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix',
-            1,
-            $configuration
-        );
+            $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+                'runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix',
+                1,
+                $configuration
+            );
+        }
     }
 
     /**
@@ -53,31 +54,34 @@ class ExtensionTest extends AbstractExtensionTestCase
      */
     public function configureUnderscoredClassNamespacePrefixNamer()
     {
-        $configuration = array(
-            'case' => 'lowercase',
-            'map' => array(
-                'My\Class\Namespace\Entity' => 'my_prefix'
-            ),
-            'joinTableFieldSuffix' => true,
-            'blacklist' =>
-                array(
-                    'My\Class\Namespace\Entity\ThisShouldBeSkipped',
-                    'My\Class\Namespace\Entity\ThisShouldBeSkippedAsWell'
+        foreach (['lowercase', 'uppercase'] as $case) {
+
+            $configuration = array(
+                'case' => $case,
+                'map' => array(
+                    'My\Class\Namespace\Entity' => 'my_prefix'
                 ),
-            'whitelist' => array()
-        );
+                'join_table_field_suffix' => true,
+                'blacklist' =>
+                    array(
+                        'My\Class\Namespace\Entity\ThisShouldBeSkipped',
+                        'My\Class\Namespace\Entity\ThisShouldBeSkippedAsWell'
+                    ),
+                'whitelist' => array()
+            );
 
-        $this->load(array('underscored_class_namespace_prefix' => $configuration));
+            $this->load(array('underscored_class_namespace_prefix' => $configuration));
 
-        $this->assertContainerBuilderHasService('runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix');
+            $this->assertContainerBuilderHasService('runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix');
 
-        $configuration['case'] = CASE_LOWER;
+            $configuration['case'] = ('uppercase' === $case) ? CASE_UPPER : CASE_LOWER;
 
-        $this->assertContainerBuilderHasServiceDefinitionWithArgument(
-            'runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix',
-            0,
-            $configuration
-        );
+            $this->assertContainerBuilderHasServiceDefinitionWithArgument(
+                'runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix',
+                0,
+                $configuration
+            );
+        }
     }
 
     /**
@@ -91,7 +95,7 @@ class ExtensionTest extends AbstractExtensionTestCase
                 'runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix',
                 'runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix'
             ),
-            'joinTableFieldSuffix' => true
+            'join_table_field_suffix' => true
         );
 
         $this->load(array('underscored_namer_collection' => $configuration));
@@ -108,7 +112,7 @@ class ExtensionTest extends AbstractExtensionTestCase
             'runopencode.doctrine.orm.naming_strategy.underscored_namer_collection',
             2,
             array(
-                'joinTableFieldSuffix' => $configuration['joinTableFieldSuffix']
+                'join_table_field_suffix' => $configuration['join_table_field_suffix']
             )
         );
     }

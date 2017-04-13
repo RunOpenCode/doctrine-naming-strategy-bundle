@@ -34,6 +34,13 @@ class UnderscoredNamerCollection implements NamingStrategy
      */
     protected $joinTableFieldSuffix;
 
+    /**
+     * UnderscoredNamerCollection constructor.
+     *
+     * @param NamingStrategy $defaultNamingStrategy
+     * @param NamingStrategy[] $concurrentNamingStrategies
+     * @param array $configuration
+     */
     public function __construct(NamingStrategy $defaultNamingStrategy, array $concurrentNamingStrategies = [], array $configuration = [])
     {
         $this->defaultNamingStrategy = $defaultNamingStrategy;
@@ -45,10 +52,10 @@ class UnderscoredNamerCollection implements NamingStrategy
         }
 
         $configuration = array_merge([
-            'joinTableFieldSuffix' => true,
+            'join_table_field_suffix' => true,
         ], $configuration);
 
-        $this->joinTableFieldSuffix = $configuration['joinTableFieldSuffix'];
+        $this->joinTableFieldSuffix = $configuration['join_table_field_suffix'];
     }
 
     /**
@@ -122,9 +129,9 @@ class UnderscoredNamerCollection implements NamingStrategy
     public function joinTableName($sourceEntity, $targetEntity, $propertyName = null)
     {
         return
-            $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity)
+            $this->classToTableName($sourceEntity).'_'.$this->classToTableName($targetEntity)
             .
-            (($this->joinTableFieldSuffix && !empty($propertyName)) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '')
+            (($this->joinTableFieldSuffix && !empty($propertyName)) ? '_'.$this->propertyToColumnName($propertyName, $sourceEntity) : '')
             ;
     }
 
@@ -135,7 +142,7 @@ class UnderscoredNamerCollection implements NamingStrategy
     {
         $namer = $this->findNamer($entityName);
 
-        return $namer->classToTableName($entityName) . '_' . ($namer->propertyToColumnName($referencedColumnName) ?: $namer->referenceColumnName());
+        return $namer->classToTableName($entityName).'_'.($namer->propertyToColumnName($referencedColumnName) ?: $namer->referenceColumnName());
     }
 
 

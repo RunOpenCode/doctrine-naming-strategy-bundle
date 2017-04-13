@@ -36,6 +36,12 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
      */
     protected $map;
 
+    /**
+     * UnderscoredBundleNamePrefix constructor.
+     *
+     * @param KernelInterface $kernel
+     * @param array $options
+     */
     public function __construct(KernelInterface $kernel, array $options = array())
     {
         $options = array_merge([
@@ -43,7 +49,7 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
             'map' => [],
             'whitelist' => [],
             'blacklist' => [],
-            'joinTableFieldSuffix' => true,
+            'join_table_field_suffix' => true,
         ], $options);
 
         if (count($options['whitelist']) > 0 && count($options['blacklist']) > 0) {
@@ -51,7 +57,7 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
         }
 
         $this->case = $options['case'];
-        $this->joinTableFieldSuffix = $options['joinTableFieldSuffix'];
+        $this->joinTableFieldSuffix = $options['join_table_field_suffix'];
 
         $this->map = $this->getNamingMap($kernel, $options);
     }
@@ -99,7 +105,7 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
      */
     public function joinColumnName($propertyName, $className = null)
     {
-        return $this->underscore($propertyName) . '_' . $this->referenceColumnName();
+        return $this->underscore($propertyName).'_'.$this->referenceColumnName();
     }
 
     /**
@@ -153,14 +159,14 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
             $bundleName = $bundle->getName();
 
             if (isset($configuration['map'][$bundleName])) {
-                $map[ $this->underscore($configuration['map'][$bundleName]) ] = $bundleNamespace;
+                $map[$this->underscore($configuration['map'][$bundleName])] = $bundleNamespace;
                 continue;
             }
 
             $bundleName = preg_replace('/Bundle$/', '', $bundleName);
 
             if (isset($configuration['map'][$bundleName])) {
-                $map[ $this->underscore($configuration['map'][$bundleName]) ] = $bundleNamespace;
+                $map[$this->underscore($configuration['map'][$bundleName])] = $bundleNamespace;
                 continue;
             }
 
