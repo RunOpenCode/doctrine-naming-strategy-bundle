@@ -8,7 +8,7 @@
     <parameters>
         <parameter key="runopencode.doctrine.orm.naming_strategy.underscored_bundle_prefix.class">RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\UnderscoredBundleNamePrefix</parameter>
         <parameter key="runopencode.doctrine.orm.naming_strategy.underscored_class_namespace_prefix.class">RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\UnderscoredClassNamespacePrefix</parameter>
-        <parameter key="runopencode.doctrine.orm.naming_strategy.underscored_namer_collection.class">RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\NamerCollection</parameter>
+        <parameter key="runopencode.doctrine.orm.naming_strategy.underscored_namer_collection.class">RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\UnderscoredNamerCollection</parameter>
     </parameters>
     
     <services>
