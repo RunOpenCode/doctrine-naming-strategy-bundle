@@ -29,22 +29,22 @@
     },
     "require": {
         "php": ">=7.0",
-        "symfony/framework-bundle": "~2.8|~3.0",
-        "doctrine/doctrine-bundle": "~1.6",
-        "doctrine/orm": "~2.5"
+        "symfony/framework-bundle": "^2.8|^3.0|^4.0",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/orm": "^2.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "~6.0",
-        "symfony/phpunit-bridge": "dev-master",
-        "symfony/debug": "~2.7|~3.0",
-        "matthiasnoback/symfony-dependency-injection-test": "~2.0",
-        "squizlabs/php_codesniffer": "~2.0",
-        "phploc/phploc": "dev-master",
-        "pdepend/pdepend" : "~2.5",
+        "phpunit/phpunit": "^6.0",
+        "symfony/phpunit-bridge": "^4.0",
+        "symfony/debug": "^2.7|^3.0|^4.0",
+        "matthiasnoback/symfony-dependency-injection-test": "^2.0|^3.0",
+        "squizlabs/php_codesniffer": "^2.0|^3.0",
+        "phploc/phploc": "^3.0|^4.0",
+        "pdepend/pdepend" : "^2.5",
         "phpmd/phpmd" : "@stable",
-        "sebastian/phpcpd": "dev-master",
-        "theseer/phpdox": "dev-master",
-        "escapestudios/symfony2-coding-standard": "~2.0",
-        "symfony/doctrine-bridge": "~3.0"
+        "sebastian/phpcpd": "^3.0|^4.0",
+        "theseer/phpdox": "^0.10",
+        "escapestudios/symfony2-coding-standard": "^2.0|^3.0",
+        "symfony/doctrine-bridge": "^3.0|^4.0"
     }
 }
