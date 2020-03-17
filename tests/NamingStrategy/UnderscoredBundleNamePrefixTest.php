@@ -270,7 +270,6 @@ final class UnderscoredBundleNamePrefixTest extends TestCase
         $this->assertSame('some_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'));
         $this->assertSame('prefix_bar_other_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Bar\\Entity\\OtherEntity'));
         $this->assertSame('buzz_third_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Buzz\\Entity\\Subfolder\\ThirdEntity'));
-
     }
 
     /**

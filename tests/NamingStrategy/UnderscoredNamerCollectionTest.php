@@ -196,4 +196,3 @@ final class UnderscoredNamerCollectionTest extends TestCase
         return $stub;
     }
 }
-

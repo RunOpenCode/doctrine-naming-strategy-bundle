@@ -1,6 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="runopencode/doctrine-naming-strategy-bundle" default="build">
 
+    <target name="build">
+        <sequential>
+            <antcall target="docker-compose-up"/>
+            <antcall target="prepare"/>
+
+            <parallel threadCount="4">
+                <antcall target="phpunit"/>
+                <antcall target="php-cs-fixer"/>
+                <antcall target="phpstan"/>
+                <antcall target="psalm"/>
+            </parallel>
+
+            <antcall target="docker-compose-down"/>
+        </sequential>
+    </target>
+
+    <target name="prepare">
+        <sequential>
+            <antcall target="composer-install"/>
+            <antcall target="phive-install"/>
+        </sequential>
+    </target>
+
+    <target name="phpunit" depends="container-name">
+        <exec executable="docker" failonerror="true">
+            <arg line="exec -t ${container} composer run phpunit"/>
+        </exec>
+    </target>
+
+    <target name="php-cs-fixer" depends="container-name">
+        <exec executable="docker" failonerror="true">
+            <arg line="exec -t ${container} composer run php-cs-fixer"/>
+        </exec>
+    </target>
+
+    <target name="phpstan" depends="container-name">
+        <exec executable="docker">
+            <arg line="exec -t ${container} composer run phpstan"/>
+        </exec>
+    </target>
+
+    <target name="psalm" depends="container-name">
+        <exec executable="docker" failonerror="true">
+            <arg line="exec -t ${container} composer run psalm"/>
+        </exec>
+    </target>
+
     <target name="composer-require-checker" depends="container-name">
         <exec executable="docker" failonerror="true">
             <arg line="exec -t ${container} composer run composer-require-checker"/>
@@ -49,6 +96,5 @@
         </exec>
         <echo message="Container name: ${container}" />
     </target>
-
 
 </project>

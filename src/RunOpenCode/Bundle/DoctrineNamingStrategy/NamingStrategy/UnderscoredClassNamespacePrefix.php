@@ -142,18 +142,14 @@ final class UnderscoredClassNamespacePrefix implements NamingStrategy
         $className = \ltrim($className, '\\');
 
         foreach ($this->blacklist as $blacklist) {
-
             if (0 === \strpos($className, $blacklist)) {
                 return '';
             }
         }
 
         foreach ($this->map as $namespace => $prefix) {
-
             if (0 === \strpos($className, $namespace)) {
-
                 foreach ($this->whitelist as $whitelistedNamespace) {
-
                     if (0 === \strpos($className, $whitelistedNamespace)) {
                         return $prefix . '_';
                     }

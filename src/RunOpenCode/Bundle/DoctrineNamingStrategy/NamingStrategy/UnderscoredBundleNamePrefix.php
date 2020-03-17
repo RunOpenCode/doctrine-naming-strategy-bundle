@@ -57,7 +57,8 @@ final class UnderscoredBundleNamePrefix implements NamingStrategy
         $position = \strpos($className, '\\');
 
         if (false !== $position) {
-            $className = \substr($className, ($position + 1));
+            /** @psalm-suppress PossiblyFalseOperand */
+            $className = \substr($className, \strrpos($className, '\\') + 1);
         }
 
         return $prefix . $this->underscore($className);
@@ -129,7 +130,6 @@ final class UnderscoredBundleNamePrefix implements NamingStrategy
         $map = [];
 
         foreach ($kernel->getBundles() as $bundle) {
-
             $bundleName = $bundle->getName();
 
             if (\count($configuration['blacklist']) > 0 && \in_array($bundleName, $configuration['blacklist'], true)) {
@@ -166,7 +166,6 @@ final class UnderscoredBundleNamePrefix implements NamingStrategy
         $className = \ltrim($className, '\\');
 
         foreach ($this->map as $prefix => $namespace) {
-
             if (0 === \strpos($className, $namespace)) {
                 return $prefix . '_';
             }

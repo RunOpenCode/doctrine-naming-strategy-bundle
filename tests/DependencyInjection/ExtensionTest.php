@@ -15,7 +15,6 @@ final class ExtensionTest extends AbstractExtensionTestCase
     public function configureUnderscoredBundlePrefixNamer(): void
     {
         foreach (['lowercase', 'uppercase'] as $case) {
-
             $configuration = array(
                 'case' => $case,
                 'map' => array(
@@ -50,7 +49,6 @@ final class ExtensionTest extends AbstractExtensionTestCase
     public function configureUnderscoredClassNamespacePrefixNamer(): void
     {
         foreach (['lowercase', 'uppercase'] as $case) {
-
             $configuration = array(
                 'case' => $case,
                 'map' => array(

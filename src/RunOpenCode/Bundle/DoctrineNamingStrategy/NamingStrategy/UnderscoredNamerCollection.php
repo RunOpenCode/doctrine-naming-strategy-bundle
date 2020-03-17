@@ -136,7 +136,6 @@ final class UnderscoredNamerCollection implements NamingStrategy
         $defaultName = \strtolower($this->defaultNamingStrategy->classToTableName($className));
 
         foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
-
             if (\strtolower($concurrentNamer->classToTableName($className)) !== $defaultName) {
                 return $concurrentNamer;
             }

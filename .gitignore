@@ -1,4 +1,5 @@
 vendor
 build/
+!tools/phpunit.phar
 tools/
 cache.properties
