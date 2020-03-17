@@ -1,24 +1,21 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionConfigurationTestCase;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection\Configuration;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection\Extension;
+use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 
-class ConfigurationTest extends AbstractExtensionConfigurationTestCase
+final class ConfigurationTest extends AbstractExtensionConfigurationTestCase
 {
     /**
      * @test
      */
-    public function itHasReasonableDefaults()
+    public function itHasReasonableDefaults(): void
     {
         $this->assertProcessedConfigurationEquals([
             'underscored_bundle_prefix' => [
@@ -51,7 +48,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
     /**
      * @test
      */
-    public function itCanBeProperlyConfigured()
+    public function itCanBeProperlyConfigured(): void
     {
         $this->assertProcessedConfigurationEquals([
             'underscored_bundle_prefix' => [
@@ -94,7 +91,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
     /**
      * @test
      */
-    public function itCanBeProperlyConfiguredWithYaml()
+    public function itCanBeProperlyConfiguredWithYaml(): void
     {
         $this->assertProcessedConfigurationEquals([
             'underscored_bundle_prefix' => [
@@ -136,7 +133,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function getContainerExtension()
+    final protected function getContainerExtension(): ExtensionInterface
     {
         return new Extension();
     }
@@ -144,7 +141,7 @@ class ConfigurationTest extends AbstractExtensionConfigurationTestCase
     /**
      * {@inheritdoc}
      */
-    protected function getConfiguration()
+    final protected function getConfiguration(): ConfigurationInterface
     {
         return new Configuration();
     }

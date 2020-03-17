@@ -1,23 +1,18 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\DependencyInjection;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection\Extension;
 
-class ExtensionTest extends AbstractExtensionTestCase
+final class ExtensionTest extends AbstractExtensionTestCase
 {
     /**
      * @test
      */
-    public function configureUnderscoredBundlePrefixNamer()
+    public function configureUnderscoredBundlePrefixNamer(): void
     {
         foreach (['lowercase', 'uppercase'] as $case) {
 
@@ -52,7 +47,7 @@ class ExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function configureUnderscoredClassNamespacePrefixNamer()
+    public function configureUnderscoredClassNamespacePrefixNamer(): void
     {
         foreach (['lowercase', 'uppercase'] as $case) {
 
@@ -87,7 +82,7 @@ class ExtensionTest extends AbstractExtensionTestCase
     /**
      * @test
      */
-    public function configureNamerCollection()
+    public function configureNamerCollection(): void
     {
         $configuration = array(
             'default' => 'doctrine.orm.naming_strategy.underscore',
@@ -120,7 +115,7 @@ class ExtensionTest extends AbstractExtensionTestCase
     /**
      * {@inheritdoc}
      */
-    protected function getContainerExtensions()
+    final protected function getContainerExtensions(): array
     {
         return array(
             new Extension()

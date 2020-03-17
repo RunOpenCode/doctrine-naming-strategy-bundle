@@ -1,0 +1,10 @@
+version: '3.3'
+
+services:
+
+    php:
+        container_name: runopencode_doctrine_naming_strategy_bundle_test
+        build:
+            context: './'
+        volumes:
+            -  './:/var/www/html'

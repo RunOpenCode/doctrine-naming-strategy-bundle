@@ -2,7 +2,12 @@
     "name": "runopencode/doctrine-naming-strategy-bundle",
     "type": "symfony-bundle",
     "description": "Set of useful Doctrine2 naming strategies for larger projects that allows you to add prefixes to Entity table names in batch.",
-    "keywords": ["doctrine", "symfony", "naming strategy", "orm"],
+    "keywords": [
+        "doctrine",
+        "symfony",
+        "naming strategy",
+        "orm"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -24,27 +29,31 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\": "test/"
+            "RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\": "tests/"
         }
     },
     "require": {
-        "php": ">=7.0",
-        "symfony/framework-bundle": "^2.8|^3.0|^4.0",
-        "doctrine/doctrine-bundle": "^1.6",
+        "php": "^7.4",
+        "ext-xml": "*",
+        "symfony/framework-bundle": "^4.0|^5.0",
+        "doctrine/doctrine-bundle": "^2.0",
+        "symfony/dependency-injection": "^4.0|^5.0",
+        "symfony/http-kernel": "^4.0|^5.0",
+        "symfony/config": "^4.0|^5.0",
         "doctrine/orm": "^2.5"
+
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "symfony/phpunit-bridge": "^4.0",
-        "symfony/debug": "^2.7|^3.0|^4.0",
-        "matthiasnoback/symfony-dependency-injection-test": "^2.0|^3.0",
-        "squizlabs/php_codesniffer": "^2.0|^3.0",
-        "phploc/phploc": "^3.0|^4.0",
-        "pdepend/pdepend" : "^2.5",
-        "phpmd/phpmd" : "@stable",
-        "sebastian/phpcpd": "^3.0|^4.0",
-        "theseer/phpdox": "^0.10",
-        "escapestudios/symfony2-coding-standard": "^2.0|^3.0",
-        "symfony/doctrine-bridge": "^3.0|^4.0"
+        "roave/security-advisories": "dev-master",
+        "matthiasnoback/symfony-dependency-injection-test": "^4.1",
+        "matthiasnoback/symfony-config-test": "^4.1"
+    },
+    "scripts": {
+        "phpunit": "tools/phpunit.phar",
+        "composer-require-checker": "tools/composer-require-checker check composer.json --config-file=`pwd`/composer-require-checker.config.dist.json",
+        "composer-unused": "tools/composer-unused --excludeDir=build --excludeDir=tools",
+        "php-cs-fixer": "tools/php-cs-fixer fix --dry-run --diff --verbose --show-progress=estimating",
+        "phpstan": "tools/phpstan analyse",
+        "psalm": "tools/psalm --threads=8 --diff --diff-methods"
     }
 }

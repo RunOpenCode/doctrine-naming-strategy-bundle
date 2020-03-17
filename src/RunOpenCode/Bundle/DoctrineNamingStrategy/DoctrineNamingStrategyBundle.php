@@ -1,23 +1,22 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy;
 
 use RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class DoctrineNamingStrategyBundle extends Bundle
+/**
+ * @psalm-suppress UnusedClass
+ */
+final class DoctrineNamingStrategyBundle extends Bundle
 {
     /**
      * {@inheritdoc}
      */
-    public function getContainerExtension()
+    public function getContainerExtension(): ExtensionInterface
     {
         return new Extension();
     }

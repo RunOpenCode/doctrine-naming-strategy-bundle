@@ -1,48 +1,45 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\NamingStrategy;
 
 use PHPUnit\Framework\TestCase;
+use RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\UnderscoredBundleNamePrefix;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\Fixtures\Bundles\Bar\BarBundle;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\Fixtures\Bundles\Buzz\BuzzBundle;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\Fixtures\Bundles\Foo\FooBundle;
+use Symfony\Component\HttpKernel\Kernel;
 
-class UnderscoredBundleNamePrefixTest extends TestCase
+final class UnderscoredBundleNamePrefixTest extends TestCase
 {
-     /**
+    /**
      * @test
-     *
-     * @expectedException \RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException
      */
-    public function invalidConfiguration()
+    public function invalidConfiguration(): void
     {
+        $this->expectException(RuntimeException::class);
+
         new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'blacklist' => [
-                'DoctrineNamingStrategyBundle'
+                'DoctrineNamingStrategyBundle',
             ],
             'whitelist' => [
-                'DoctrineNamingStrategyBundle'
-            ]
+                'DoctrineNamingStrategyBundle',
+            ],
         ]);
     }
 
     /**
      * @test
      */
-    public function classToTableNameLowercase()
+    public function classToTableNameLowercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'map' => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
         ]);
 
@@ -54,12 +51,12 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function classToTableNameUppercase()
+    public function classToTableNameUppercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
+            'map'  => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
             'case' => CASE_UPPER,
         ]);
@@ -72,7 +69,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function propertyToColumnNameLowercase()
+    public function propertyToColumnNameLowercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel());
 
@@ -82,7 +79,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function propertyToColumnNameUppercase()
+    public function propertyToColumnNameUppercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'case' => CASE_UPPER,
@@ -94,7 +91,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function embeddedFieldToColumnNameLowercase()
+    public function embeddedFieldToColumnNameLowercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel());
 
@@ -104,7 +101,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function embeddedFieldToColumnNameUppercase()
+    public function embeddedFieldToColumnNameUppercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'case' => CASE_UPPER,
@@ -116,7 +113,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function referenceColumnName()
+    public function referenceColumnName(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel());
         $this->assertSame('id', $strategy->referenceColumnName());
@@ -130,7 +127,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinColumnNameLowercase()
+    public function joinColumnNameLowercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel());
 
@@ -140,7 +137,7 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinColumnNameUppercase()
+    public function joinColumnNameUppercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'case' => CASE_UPPER,
@@ -152,12 +149,12 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinTableNameLowercase()
+    public function joinTableNameLowercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'map' => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
         ]);
 
@@ -175,14 +172,14 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinTableNameUppercase()
+    public function joinTableNameUppercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
+            'map'  => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
-            'case' => CASE_UPPER
+            'case' => CASE_UPPER,
         ]);
 
         $this->assertSame('FOO_PREFIX_SOME_ENTITY_PREFIX_BAR_OTHER_ENTITY', $strategy->joinTableName(
@@ -199,14 +196,14 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinTableNameDisableJoinTableFieldSuffix()
+    public function joinTableNameDisableJoinTableFieldSuffix(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
+            'map'                     => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
-            'join_table_field_suffix' => false
+            'join_table_field_suffix' => false,
         ]);
 
         $this->assertSame('foo_prefix_some_entity_prefix_bar_other_entity', $strategy->joinTableName(
@@ -223,12 +220,12 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinKeyColumnNameLowercase()
+    public function joinKeyColumnNameLowercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
             'map' => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
         ]);
 
@@ -240,12 +237,12 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinKeyColumnNameUppercase()
+    public function joinKeyColumnNameUppercase(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
+            'map'  => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
             'case' => CASE_UPPER,
         ]);
@@ -258,16 +255,16 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function blacklisted()
+    public function blacklisted(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
+            'map'       => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
             'blacklist' => [
-                'FooBundle'
-            ]
+                'FooBundle',
+            ],
         ]);
 
         $this->assertSame('some_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'));
@@ -279,16 +276,16 @@ class UnderscoredBundleNamePrefixTest extends TestCase
     /**
      * @test
      */
-    public function whitelisted()
+    public function whitelisted(): void
     {
         $strategy = new UnderscoredBundleNamePrefix($this->mockKernel(), [
-            'map' => [
+            'map'       => [
                 'FooBundle' => 'foo_prefix',
-                'Bar' => 'prefix_bar'
+                'Bar'       => 'prefix_bar',
             ],
             'whitelist' => [
-                'FooBundle'
-            ]
+                'FooBundle',
+            ],
         ]);
 
         $this->assertSame('foo_prefix_some_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Foo\\Entity\\SomeEntity'));
@@ -296,17 +293,18 @@ class UnderscoredBundleNamePrefixTest extends TestCase
         $this->assertSame('third_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Tests\\Fixtures\\Bundles\\Buzz\\Entity\\Subfolder\\ThirdEntity'));
     }
 
-    private function mockKernel()
+    private function mockKernel(): Kernel
     {
-        $stub = $this->getMockBuilder('Symfony\\Component\\HttpKernel\\Kernel')->disableOriginalConstructor()->getMock();
+        $stub = $this->getMockBuilder(Kernel::class)->disableOriginalConstructor()->getMock();
 
         $stub->method('getBundles')
-            ->willReturn([
-                new FooBundle(),
-                new BarBundle(),
-                new BuzzBundle(),
-            ]);
+             ->willReturn([
+                 new FooBundle(),
+                 new BarBundle(),
+                 new BuzzBundle(),
+             ]);
 
+        /** @var Kernel $stub */
         return $stub;
     }
 }

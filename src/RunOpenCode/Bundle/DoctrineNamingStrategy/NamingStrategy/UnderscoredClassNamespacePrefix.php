@@ -1,99 +1,94 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy;
 
 use Doctrine\ORM\Mapping\NamingStrategy;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException;
 
 /**
- * Class UnderscoredClassNamespacePrefix
- *
- * @package RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy
+ * @psalm-suppress UnusedClass
  */
-class UnderscoredClassNamespacePrefix implements NamingStrategy
+final class UnderscoredClassNamespacePrefix implements NamingStrategy
 {
-    /**
-     * @var int
-     */
-    protected $case = CASE_LOWER;
+    private int $case;
+
+    protected bool $joinTableFieldSuffix;
 
     /**
-     * @var bool
+     * @var string[]
      */
-    protected $joinTableFieldSuffix;
+    protected array $whitelist;
 
     /**
-     * @var array
+     * @var string[]
      */
-    protected $whitelist;
+    protected array $blacklist;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
-    protected $blacklist;
+    protected array $map;
 
     /**
-     * @var array
-     */
-    protected $map;
-
-    /**
-     * UnderscoredClassNamespacePrefix constructor.
+     * @psalm-param array{case?: int, map?: array<string, string>, blacklist?: string[], whitelist?: string[], join_table_field_suffix?: bool } $configuration
      *
-     * @param array $configuration
+     * @throws RuntimeException
      */
-    public function __construct(array $configuration = array())
+    public function __construct(array $configuration = [])
     {
+        /**
+         * @psalm-var array{case: int, map: array<string, string>, blacklist: string[], whitelist: string[], join_table_field_suffix: bool } $configuration
+         */
         $configuration = array_merge([
-            'case' => CASE_LOWER,
-            'map' => [],
-            'whitelist' => [],
-            'blacklist' => [],
+            'case'                    => CASE_LOWER,
+            'map'                     => [],
+            'whitelist'               => [],
+            'blacklist'               => [],
             'join_table_field_suffix' => true,
         ], $configuration);
 
-        if (count($configuration['whitelist']) > 0 && count($configuration['blacklist']) > 0) {
+        if (\count($configuration['whitelist']) > 0 && \count($configuration['blacklist']) > 0) {
             throw new RuntimeException('You can use whitelist or blacklist or none of mentioned lists, but not booth.');
         }
 
         $this->case = $configuration['case'];
-        $this->map = array_map(\Closure::bind(function ($prefix) {
+        /**
+         * @psalm-suppress MixedPropertyTypeCoercion
+         */
+        $this->map       = \array_map(\Closure::bind(function (string $prefix) {
             return $this->underscore($prefix);
         }, $this), $configuration['map']);
-        $this->blacklist = array_map(function($fqcn) {
-            return ltrim($fqcn, '\\');
+        $this->blacklist = \array_map(static function (string $class) {
+            return \ltrim($class, '\\');
         }, $configuration['blacklist']);
-        $this->whitelist = array_map(function($fqcn) {
-            return ltrim($fqcn, '\\');
+        $this->whitelist = \array_map(static function (string $class) {
+            return \ltrim($class, '\\');
         }, $configuration['whitelist']);
+
         $this->joinTableFieldSuffix = $configuration['join_table_field_suffix'];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function classToTableName($className)
+    public function classToTableName($className): string
     {
-        $prefix = $this->getTableNamePrefix($className);
+        $prefix   = $this->getTableNamePrefix($className);
+        $position = \strrpos($className, '\\');
 
-        if (strpos($className, '\\') !== false) {
-            $className = substr($className, strrpos($className, '\\') + 1);
+        if (false !== $position) {
+            $className = \substr($className, ($position + 1));
         }
 
-        return $prefix.$this->underscore($className);
+        return $prefix . $this->underscore($className);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function propertyToColumnName($propertyName, $className = null)
+    public function propertyToColumnName($propertyName, $className = null): string
     {
         return $this->underscore($propertyName);
     }
@@ -101,98 +96,85 @@ class UnderscoredClassNamespacePrefix implements NamingStrategy
     /**
      * {@inheritdoc}
      */
-    public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null)
+    public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null): string
     {
-        return $this->underscore($propertyName).'_'.$this->underscore($embeddedColumnName);
+        return $this->underscore($propertyName) . '_' . $this->underscore($embeddedColumnName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function referenceColumnName()
+    public function referenceColumnName(): string
     {
-        return $this->case === CASE_UPPER ?  'ID' : 'id';
+        return $this->case === CASE_UPPER ? 'ID' : 'id';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinColumnName($propertyName, $className = null)
+    public function joinColumnName($propertyName): string
     {
-        return $this->underscore($propertyName).'_'.$this->referenceColumnName();
+        return $this->underscore($propertyName) . '_' . $this->referenceColumnName();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null)
+    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null): string
     {
-        $tableName = $this->classToTableName($sourceEntity).'_'.$this->classToTableName($targetEntity);
+        $tableName = $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity);
+        $suffix    = $this->joinTableFieldSuffix && null !== $propertyName ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '';
 
-        return
-            $tableName
-            .
-            (($this->joinTableFieldSuffix && null !== $propertyName) ? '_'.$this->propertyToColumnName($propertyName, $sourceEntity) : '');
+        return $tableName . $suffix;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinKeyColumnName($entityName, $referencedColumnName = null)
+    public function joinKeyColumnName($entityName, $referencedColumnName = null): string
     {
-        return $this->classToTableName($entityName).'_'.
+        return $this->classToTableName($entityName) . '_' .
             ($referencedColumnName ? $this->underscore($referencedColumnName) : $this->referenceColumnName());
     }
 
-    /**
-     * Get prefix for table from map.
-     *
-     * @param string $className
-     * @return string
-     */
-    protected function getTableNamePrefix($className)
+    private function getTableNamePrefix(string $className): string
     {
-        $className = ltrim($className, '\\');
+        $className = \ltrim($className, '\\');
 
         foreach ($this->blacklist as $blacklist) {
 
-            if (strpos($className, $blacklist) === 0) {
+            if (0 === \strpos($className, $blacklist)) {
                 return '';
             }
         }
 
         foreach ($this->map as $namespace => $prefix) {
 
-            if (strpos($className, $namespace) === 0) {
+            if (0 === \strpos($className, $namespace)) {
 
                 foreach ($this->whitelist as $whitelistedNamespace) {
 
-                    if (strpos($className, $whitelistedNamespace) === 0) {
-                        return $prefix.'_';
+                    if (0 === \strpos($className, $whitelistedNamespace)) {
+                        return $prefix . '_';
                     }
                 }
 
-                return 0 === count($this->whitelist) ? $prefix.'_' : '';
+                return 0 === \count($this->whitelist) ? ($prefix . '_') : '';
             }
         }
 
         return '';
     }
 
-    /**
-     * Build underscore version of given string.
-     *
-     * @param string $string
-     * @return string
-     */
-    protected function underscore($string)
+    private function underscore(string $literal): string
     {
-        $string = preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $string);
+        /** @var string $literal */
+        $literal = \preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $literal);
 
         if (CASE_UPPER === $this->case) {
-            return strtoupper($string);
+            return \strtoupper($literal);
         }
 
-        return strtolower($string);
+        return \strtolower($literal);
     }
 }

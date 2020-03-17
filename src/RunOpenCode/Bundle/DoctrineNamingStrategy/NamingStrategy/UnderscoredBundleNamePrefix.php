@@ -1,85 +1,72 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy;
 
 use Doctrine\ORM\Mapping\NamingStrategy;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException;
-use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
- * Class UnderscoredBundleNamePrefix
- *
- * @package RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy
+ * @psalm-suppress UnusedClass
  */
-class UnderscoredBundleNamePrefix implements NamingStrategy
+final class UnderscoredBundleNamePrefix implements NamingStrategy
 {
-    /**
-     * @var int
-     */
-    protected $case = CASE_LOWER;
+    private int $case;
+
+    private bool $joinTableFieldSuffix;
+
+    /** @var array<string, string> */
+    private array $map;
 
     /**
-     * @var bool
-     */
-    protected $joinTableFieldSuffix;
-
-    /**
-     * @var array
-     */
-    protected $map;
-
-    /**
-     * UnderscoredBundleNamePrefix constructor.
+     * @psalm-param array{case?: int, map?: array<string, string>, blacklist?: string[], whitelist?: string[], join_table_field_suffix?: bool } $options
      *
-     * @param KernelInterface $kernel
-     * @param array $options
+     * @throws RuntimeException
+     * @throws \ReflectionException
      */
-    public function __construct(KernelInterface $kernel, array $options = array())
+    public function __construct(KernelInterface $kernel, array $options = [])
     {
-        $options = array_merge([
-            'case' => CASE_LOWER,
-            'map' => [],
-            'whitelist' => [],
-            'blacklist' => [],
+        /**
+         * @psalm-var array{case: int, map: array<string, string>, blacklist: string[], whitelist: string[], join_table_field_suffix: bool } $options
+         */
+        $options = \array_merge([
+            'case'                    => CASE_LOWER,
+            'map'                     => [],
+            'whitelist'               => [],
+            'blacklist'               => [],
             'join_table_field_suffix' => true,
         ], $options);
 
-        if (count($options['whitelist']) > 0 && count($options['blacklist']) > 0) {
+        if (\count($options['whitelist']) > 0 && \count($options['blacklist']) > 0) {
             throw new RuntimeException('You can use whitelist or blacklist or none of mentioned lists, but not booth.');
         }
 
-        $this->case = $options['case'];
+        $this->case                 = $options['case'];
         $this->joinTableFieldSuffix = $options['join_table_field_suffix'];
-
-        $this->map = $this->getNamingMap($kernel, $options);
+        $this->map                  = $this->getNamingMap($kernel, $options);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function classToTableName($className)
+    public function classToTableName($className): string
     {
-        $prefix = $this->getTableNamePrefix($className);
+        $prefix   = $this->getTableNamePrefix($className);
+        $position = \strpos($className, '\\');
 
-        if (strpos($className, '\\') !== false) {
-            $className = substr($className, strrpos($className, '\\') + 1);
+        if (false !== $position) {
+            $className = \substr($className, ($position + 1));
         }
 
-        return $prefix.$this->underscore($className);
+        return $prefix . $this->underscore($className);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function propertyToColumnName($propertyName, $className = null)
+    public function propertyToColumnName($propertyName, $className = null): string
     {
         return $this->underscore($propertyName);
     }
@@ -87,130 +74,116 @@ class UnderscoredBundleNamePrefix implements NamingStrategy
     /**
      * {@inheritdoc}
      */
-    public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null)
+    public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null): string
     {
-        return $this->underscore($propertyName).'_'.$this->underscore($embeddedColumnName);
+        return $this->underscore($propertyName) . '_' . $this->underscore($embeddedColumnName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function referenceColumnName()
+    public function referenceColumnName(): string
     {
-        return $this->case === CASE_UPPER ?  'ID' : 'id';
+        return $this->case === CASE_UPPER ? 'ID' : 'id';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinColumnName($propertyName, $className = null)
+    public function joinColumnName($propertyName): string
     {
-        return $this->underscore($propertyName).'_'.$this->referenceColumnName();
+        return $this->underscore($propertyName) . '_' . $this->referenceColumnName();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null)
+    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null): string
     {
-        $tableName = $this->classToTableName($sourceEntity).'_'.$this->classToTableName($targetEntity);
+        $tableName = $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity);
 
         return
             $tableName
             .
-            (($this->joinTableFieldSuffix && null !== $propertyName) ? '_'.$this->propertyToColumnName($propertyName, $sourceEntity) : '');
+            (($this->joinTableFieldSuffix && null !== $propertyName) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinKeyColumnName($entityName, $referencedColumnName = null)
+    public function joinKeyColumnName($entityName, $referencedColumnName = null): string
     {
-        return $this->classToTableName($entityName).'_'.
+        return $this->classToTableName($entityName) . '_' .
             ($referencedColumnName ? $this->underscore($referencedColumnName) : $this->referenceColumnName());
     }
 
     /**
-     * Get bundle naming map.
+     * @psalm-param array{map: array<string, string>, blacklist: string[], whitelist: string[] } $configuration
      *
-     * @param KernelInterface $kernel
-     * @param array $configuration
+     * @return array<string, string>
      *
-     * @return array
+     * @throws \ReflectionException
      */
-    private function getNamingMap(KernelInterface $kernel, array $configuration)
+    private function getNamingMap(KernelInterface $kernel, array $configuration): array
     {
         $map = [];
 
-        /**
-         * @var BundleInterface $bundle;
-         */
         foreach ($kernel->getBundles() as $bundle) {
 
-            if (count($configuration['blacklist']) > 0 && in_array($bundle->getName(), $configuration['blacklist'])) {
-                continue;
-            }
-
-            if (count($configuration['whitelist']) > 0 && !in_array($bundle->getName(), $configuration['whitelist'])) {
-                continue;
-            }
-
-            $bundleNamespace = (new \ReflectionClass(get_class($bundle)))->getNamespaceName();
             $bundleName = $bundle->getName();
 
+            if (\count($configuration['blacklist']) > 0 && \in_array($bundleName, $configuration['blacklist'], true)) {
+                continue;
+            }
+
+            if (\count($configuration['whitelist']) > 0 && !\in_array($bundleName, $configuration['whitelist'], true)) {
+                continue;
+            }
+
+            $bundleNamespace = (new \ReflectionClass(\get_class($bundle)))->getNamespaceName();
+
             if (isset($configuration['map'][$bundleName])) {
                 $map[$this->underscore($configuration['map'][$bundleName])] = $bundleNamespace;
                 continue;
             }
 
-            $bundleName = preg_replace('/Bundle$/', '', $bundleName);
+            /** @var string $bundleName */
+            $bundleName = \preg_replace('/Bundle$/', '', $bundleName);
 
             if (isset($configuration['map'][$bundleName])) {
                 $map[$this->underscore($configuration['map'][$bundleName])] = $bundleNamespace;
                 continue;
             }
 
-            $map[ $this->underscore($bundleName) ] = $bundleNamespace;
+            $map[$this->underscore($bundleName)] = $bundleNamespace;
         }
 
         return $map;
     }
 
-    /**
-     * Get prefix for table from map.
-     *
-     * @param string $className
-     * @return string
-     */
-    protected function getTableNamePrefix($className)
+    private function getTableNamePrefix(string $className): string
     {
-        $className = ltrim($className, '\\');
+        $className = \ltrim($className, '\\');
 
         foreach ($this->map as $prefix => $namespace) {
 
-            if (strpos($className, $namespace) === 0) {
-                return $prefix.'_';
+            if (0 === \strpos($className, $namespace)) {
+                return $prefix . '_';
             }
         }
 
         return '';
     }
 
-
-    /**
-     * Build underscore version of given string.
-     *
-     * @param string $string
-     * @return string
-     */
-    protected function underscore($string)
+    private function underscore(string $literal): string
     {
-        $string = preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $string);
+        /** @var string $literal */
+        $literal = \preg_replace('/(?<=[a-z])([A-Z])/', '_$1', $literal);
 
         if (CASE_UPPER === $this->case) {
-            return strtoupper($string);
+            return \strtoupper($literal);
         }
 
-        return strtolower($string);
+        return \strtolower($literal);
     }
 }

@@ -1,86 +1,63 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy;
 
 use Doctrine\ORM\Mapping\NamingStrategy;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\InvalidArgumentException;
 
 /**
- * Class UnderscoredNamerCollection
- *
- * @package RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy
+ * @psalm-suppress UnusedClass
  */
-class UnderscoredNamerCollection implements NamingStrategy
+final class UnderscoredNamerCollection implements NamingStrategy
 {
-    /**
-     * @var NamingStrategy
-     */
-    protected $defaultNamingStrategy;
+    protected NamingStrategy $defaultNamingStrategy;
 
     /**
      * @var NamingStrategy[]
      */
-    protected $concurrentNamingStrategies;
+    protected array $concurrentNamingStrategies;
+
+    protected bool $joinTableFieldSuffix;
 
     /**
-     * @var bool
-     */
-    protected $joinTableFieldSuffix;
-
-    /**
-     * UnderscoredNamerCollection constructor.
-     *
-     * @param NamingStrategy $defaultNamingStrategy
+     * @param NamingStrategy   $defaultNamingStrategy
      * @param NamingStrategy[] $concurrentNamingStrategies
-     * @param array $configuration
+     * @param array<array-key,mixed> $configuration
      */
     public function __construct(NamingStrategy $defaultNamingStrategy, array $concurrentNamingStrategies = [], array $configuration = [])
     {
-        $this->defaultNamingStrategy = $defaultNamingStrategy;
-
+        $this->defaultNamingStrategy      = $defaultNamingStrategy;
         $this->concurrentNamingStrategies = [];
 
         foreach ($concurrentNamingStrategies as $namingStrategy) {
             $this->registerNamingStrategy($namingStrategy);
         }
 
-        $configuration = array_merge([
+        $configuration = \array_merge([
             'join_table_field_suffix' => true,
         ], $configuration);
 
-        $this->joinTableFieldSuffix = $configuration['join_table_field_suffix'];
+        $this->joinTableFieldSuffix = (bool)$configuration['join_table_field_suffix'];
     }
 
     /**
-     * Register naming strategy.
-     *
-     * @param NamingStrategy $namingStrategy
-     *
-     * @return UnderscoredNamerCollection $this
-     *
-     * @throws \RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
-    public function registerNamingStrategy(NamingStrategy $namingStrategy)
+    public function registerNamingStrategy(NamingStrategy $namingStrategy): void
     {
         if ($namingStrategy === $this->defaultNamingStrategy) {
             throw new InvalidArgumentException('Concurent naming strategy can not be default naming strategy.');
         }
 
         $this->concurrentNamingStrategies[] = $namingStrategy;
-        return $this;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function classToTableName($className)
+    public function classToTableName($className): string
     {
         return $this->findNamer($className)->classToTableName($className);
     }
@@ -88,7 +65,7 @@ class UnderscoredNamerCollection implements NamingStrategy
     /**
      * {@inheritdoc}
      */
-    public function propertyToColumnName($propertyName, $className = null)
+    public function propertyToColumnName($propertyName, $className = null): string
     {
         return $this->findNamer($className)->propertyToColumnName($propertyName, $className);
     }
@@ -96,7 +73,7 @@ class UnderscoredNamerCollection implements NamingStrategy
     /**
      * {@inheritdoc}
      */
-    public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null)
+    public function embeddedFieldToColumnName($propertyName, $embeddedColumnName, $className = null, $embeddedClassName = null): string
     {
         $namer = $this->findNamer($embeddedClassName);
 
@@ -110,7 +87,7 @@ class UnderscoredNamerCollection implements NamingStrategy
     /**
      * {@inheritdoc}
      */
-    public function referenceColumnName()
+    public function referenceColumnName(): string
     {
         return $this->defaultNamingStrategy->referenceColumnName();
     }
@@ -118,52 +95,49 @@ class UnderscoredNamerCollection implements NamingStrategy
     /**
      * {@inheritdoc}
      */
-    public function joinColumnName($propertyName, $className = null)
+    public function joinColumnName($propertyName): string
     {
-        return $this->findNamer($className)->joinColumnName($propertyName, $className);
+        return $this->findNamer()->joinColumnName($propertyName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null)
+    public function joinTableName($sourceEntity, $targetEntity, $propertyName = null): string
     {
         return
-            $this->classToTableName($sourceEntity).'_'.$this->classToTableName($targetEntity)
+            $this->classToTableName($sourceEntity) . '_' . $this->classToTableName($targetEntity)
             .
-            (($this->joinTableFieldSuffix && !empty($propertyName)) ? '_'.$this->propertyToColumnName($propertyName, $sourceEntity) : '')
-            ;
+            (($this->joinTableFieldSuffix && !empty($propertyName)) ? '_' . $this->propertyToColumnName($propertyName, $sourceEntity) : '');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function joinKeyColumnName($entityName, $referencedColumnName = null)
+    public function joinKeyColumnName($entityName, $referencedColumnName = null): string
     {
-        $namer = $this->findNamer($entityName);
+        $namer              = $this->findNamer($entityName);
+        $classTableName     = $namer->classToTableName($entityName);
+        $propertyColumnName = $namer->referenceColumnName();
 
-        return $namer->classToTableName($entityName).'_'.($namer->propertyToColumnName($referencedColumnName) ?: $namer->referenceColumnName());
+        if (null !== $referencedColumnName) {
+            $propertyColumnName = $namer->propertyToColumnName($referencedColumnName) ?: $namer->referenceColumnName();
+        }
+
+        return \sprintf('%s_%s', $classTableName, $propertyColumnName);
     }
 
-
-    /**
-     * Find applicable naming strategy for given class.
-     *
-     * @param string $className
-     *
-     * @return NamingStrategy
-     */
-    private function findNamer($className)
+    private function findNamer(?string $className = null): NamingStrategy
     {
         if ($className === null) {
             return $this->defaultNamingStrategy;
         }
 
-        $defaultName = strtolower($this->defaultNamingStrategy->classToTableName($className));
+        $defaultName = \strtolower($this->defaultNamingStrategy->classToTableName($className));
 
         foreach ($this->concurrentNamingStrategies as $concurrentNamer) {
 
-            if (strtolower($concurrentNamer->classToTableName($className)) !== $defaultName) {
+            if (\strtolower($concurrentNamer->classToTableName($className)) !== $defaultName) {
                 return $concurrentNamer;
             }
         }

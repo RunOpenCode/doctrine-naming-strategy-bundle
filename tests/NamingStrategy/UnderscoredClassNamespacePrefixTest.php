@@ -7,20 +7,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\Tests\NamingStrategy;
 
 use PHPUnit\Framework\TestCase;
+use RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException;
 use RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\UnderscoredClassNamespacePrefix;
 
 class UnderscoredClassNamespacePrefixTest extends TestCase
 {
     /**
      * @test
-     *
-     * @expectedException \RunOpenCode\Bundle\DoctrineNamingStrategy\Exception\RuntimeException
      */
-    public function invalidConfiguration()
+    public function invalidConfiguration(): void
     {
+        $this->expectException(RuntimeException::class);
+
         new UnderscoredClassNamespacePrefix([
             'blacklist' => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
@@ -34,7 +36,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function classToTableNameLowercase()
+    public function classToTableNameLowercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
             'map' => [
@@ -48,10 +50,10 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function classToTableNameUppercase()
+    public function classToTableNameUppercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
-            'map' => [
+            'map'  => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
             ],
             'case' => CASE_UPPER,
@@ -63,7 +65,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function propertyToColumnNameLowercase()
+    public function propertyToColumnNameLowercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix();
 
@@ -73,7 +75,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function propertyToColumnNameUppercase()
+    public function propertyToColumnNameUppercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
             'case' => CASE_UPPER,
@@ -85,7 +87,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function embeddedFieldToColumnNameLowercase()
+    public function embeddedFieldToColumnNameLowercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix();
 
@@ -95,7 +97,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function embeddedFieldToColumnNameUppercase()
+    public function embeddedFieldToColumnNameUppercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
             'case' => CASE_UPPER,
@@ -107,7 +109,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function referenceColumnName()
+    public function referenceColumnName(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix();
         $this->assertSame('id', $strategy->referenceColumnName());
@@ -122,7 +124,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinColumnNameLowercase()
+    public function joinColumnNameLowercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix();
 
@@ -132,7 +134,7 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinColumnNameUppercase()
+    public function joinColumnNameUppercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
             'case' => CASE_UPPER,
@@ -144,12 +146,12 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinTableNameLowercase()
+    public function joinTableNameLowercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
             'map' => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
-                'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
+                'RunOpenCode\\Bundle\\TestNamespace\\Other'  => 'my_other_prefix',
             ],
         ]);
 
@@ -168,12 +170,12 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinTableNameUppercase()
+    public function joinTableNameUppercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
-            'map' => [
+            'map'  => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
-                'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
+                'RunOpenCode\\Bundle\\TestNamespace\\Other'  => 'my_other_prefix',
             ],
             'case' => CASE_UPPER,
         ]);
@@ -194,12 +196,12 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinTableNameDisableJoinTableFieldSuffix()
+    public function joinTableNameDisableJoinTableFieldSuffix(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
-            'map' => [
+            'map'                     => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
-                'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
+                'RunOpenCode\\Bundle\\TestNamespace\\Other'  => 'my_other_prefix',
             ],
             'join_table_field_suffix' => false,
         ]);
@@ -214,12 +216,12 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinKeyColumnNameLowercase()
+    public function joinKeyColumnNameLowercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
             'map' => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
-                'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
+                'RunOpenCode\\Bundle\\TestNamespace\\Other'  => 'my_other_prefix',
             ],
         ]);
 
@@ -236,12 +238,12 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function joinKeyColumnNameUppercase()
+    public function joinKeyColumnNameUppercase(): void
     {
         $strategy = new UnderscoredClassNamespacePrefix([
-            'map' => [
+            'map'  => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
-                'RunOpenCode\\Bundle\\TestNamespace\\Other' => 'my_other_prefix'
+                'RunOpenCode\\Bundle\\TestNamespace\\Other'  => 'my_other_prefix',
             ],
             'case' => CASE_UPPER,
         ]);
@@ -259,16 +261,16 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function blacklisted()
+    public function blacklisted(): void
     {
-        $strategy = new UnderscoredClassNamespacePrefix(array(
-            'map' => array(
-                'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix'
-            ),
-            'blacklist' => array(
-                'RunOpenCode\\Bundle'
-            )
-        ));
+        $strategy = new UnderscoredClassNamespacePrefix([
+            'map'       => [
+                'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
+            ],
+            'blacklist' => [
+                'RunOpenCode\\Bundle',
+            ],
+        ]);
 
         $this->assertSame('some_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Entity\\SomeEntity'));
     }
@@ -276,17 +278,17 @@ class UnderscoredClassNamespacePrefixTest extends TestCase
     /**
      * @test
      */
-    public function whitelisted()
+    public function whitelisted(): void
     {
-        $strategy = new UnderscoredClassNamespacePrefix(array(
-            'map' => array(
+        $strategy = new UnderscoredClassNamespacePrefix([
+            'map'       => [
                 'RunOpenCode\\Bundle\\TestNamespace\\Entity' => 'my_prefix',
-                'RunOpenCode\\Bundle2\\Entity' => 'whitelisted_prefix'
-            ),
-            'whitelist' => array(
-                'RunOpenCode\\Bundle2'
-            )
-        ));
+                'RunOpenCode\\Bundle2\\Entity'               => 'whitelisted_prefix',
+            ],
+            'whitelist' => [
+                'RunOpenCode\\Bundle2',
+            ],
+        ]);
 
         $this->assertSame('some_entity', $strategy->classToTableName('RunOpenCode\\Bundle\\DoctrineNamingStrategy\\Entity\\SomeEntity'));
         $this->assertSame('whitelisted_prefix_some_entity', $strategy->classToTableName('RunOpenCode\\Bundle2\\Entity\\SomeEntity'));

@@ -48,22 +48,16 @@ You can install this bundle by using composer:
 
 or you can add bundle name to your `composer.json` and execute `php composer update` command.
                                
-After that, all you need is to add the bundle to your `AppKernel.php`:
+After that, all you need is to add the bundle to your `config/bundles.php` file:
                                
-    class AppKernel extends Kernel 
-    {
-        public function registerBundles()
-        {
-            $bundles = array(
-                [... YOUR BUNDLES...],
-                new RunOpenCode\Bundle\DoctrineNamingStrategy\DoctrineNamingStrategyBundle()
-            );
-                
-            return $bundles;
-        }
-    }                   
+    <?php 
+    
+    return [
+        // ... other bundles
+        RunOpenCode\Bundle\DoctrineNamingStrategy\DoctrineNamingStrategyBundle::class => [ 'all' => true ],
+    ];               
 
-And in your project `config.yml` you should define which naming strategy you would like to use:
+And in your project `config/packages/doctrine.yml` you should define which naming strategy you would like to use:
                 
     doctrine:
         orm:

@@ -1,30 +1,27 @@
 <?php
-/*
- * This file is part of the Doctrine Naming Strategy Bundle, an RunOpenCode project.
- *
- * (c) 2017 RunOpenCode
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+
+declare(strict_types=1);
+
 namespace RunOpenCode\Bundle\DoctrineNamingStrategy\DependencyInjection;
 
-use RunOpenCode\Bundle\DoctrineNamingStrategy\NamingStrategy\NamerCollection;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-class Configuration implements ConfigurationInterface
+
+final class Configuration implements ConfigurationInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
-        $treeBuilder = new TreeBuilder();
+        $treeBuilder = new TreeBuilder('runopencode_doctrine_naming_strategy');
+        $rootNode    = $treeBuilder->getRootNode();
 
-        $rootNode = $treeBuilder->root('runopencode_doctrine_naming_strategy');
-
+        /**
+         * @psalm-suppress all
+         */
         $rootNode
             ->children()
                 ->append($this->getUnderscoredBundlePrefixDefinition())
@@ -38,13 +35,14 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Configure underscored bundle prefix naming strategy
-     *
-     * @return ArrayNodeDefinition
      */
-    protected function getUnderscoredBundlePrefixDefinition()
+    private function getUnderscoredBundlePrefixDefinition(): ArrayNodeDefinition
     {
         $node = new ArrayNodeDefinition('underscored_bundle_prefix');
 
+        /**
+         * @psalm-suppress all
+         */
         $node
             ->addDefaultsIfNotSet()
             ->children()
@@ -65,7 +63,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('whitelist')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(static function ($value) {
                             return [$value];
                         })
                         ->end()
@@ -75,7 +73,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('blacklist')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(static function ($value) {
                             return [$value];
                         })
                     ->end()
@@ -90,13 +88,14 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Configure underscored class namespace prefix naming strategy
-     *
-     * @return ArrayNodeDefinition
      */
-    protected function getUnderscoredClassNamespacePrefixDefinition()
+    private function getUnderscoredClassNamespacePrefixDefinition(): ArrayNodeDefinition
     {
         $node = new ArrayNodeDefinition('underscored_class_namespace_prefix');
 
+        /**
+         * @psalm-suppress all
+         */
         $node
             ->addDefaultsIfNotSet()
             ->children()
@@ -118,7 +117,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('whitelist')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(static function ($value) {
                             return [$value];
                         })
                     ->end()
@@ -128,7 +127,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('blacklist')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(static function ($value) {
                             return [$value];
                         })
                     ->end()
@@ -143,17 +142,17 @@ class Configuration implements ConfigurationInterface
 
     /**
      * Configure namer collection
-     *
-     * @return ArrayNodeDefinition
      */
-    protected function getNamerCollectionDefinition()
+    private function getNamerCollectionDefinition(): ArrayNodeDefinition
     {
         $node = new ArrayNodeDefinition('underscored_namer_collection');
 
+        /**
+         * @psalm-suppress all
+         */
         $node
             ->addDefaultsIfNotSet()
             ->fixXmlConfig('namer')
-
             ->children()
                 ->scalarNode('default')
                     ->info('Default namer which will determine default name.')
@@ -162,7 +161,7 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('namers')
                     ->beforeNormalization()
                         ->ifString()
-                        ->then(function ($value) {
+                        ->then(static function ($value) {
                             return [$value];
                         })
                     ->end()
@@ -183,5 +182,4 @@ class Configuration implements ConfigurationInterface
 
         return $node;
     }
-
 }
