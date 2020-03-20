@@ -136,3 +136,12 @@ tables into database. Otherwise, it will give you a quite an issue if you do not
 - Some DBMS have certain limitation in regards to number of characters in table and/or column names (per example,
 MySQL which allows 64 chars, [read this article for details](https://dev.mysql.com/doc/refman/5.7/en/identifiers.html)).
 Adding long prefixes can easily breach that limitation.
+
+## Development 
+
+Library is delivered with dockerized environment. You may run `docker-compose up -d` to fire up environment, and 
+then you can run `bin/attach` to attach container to your CLI. From container, you may run scripts defined
+in `composer.json` file to do static analysis, check code style, as well as run tests.
+
+In order to run full build, you need to have `ant` installed and you may run it from root directory of your project
+from host (outside of container).
