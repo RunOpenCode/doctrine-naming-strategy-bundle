@@ -78,7 +78,7 @@
         </exec>
     </target>
 
-    <target name="docker-compose-up" depends="container-name">
+    <target name="docker-compose-up">
         <exec executable="docker-compose" failonerror="true">
             <arg line="up --build -d"/>
         </exec>
